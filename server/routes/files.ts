@@ -33,7 +33,10 @@ router.post("/upload", upload.single("myFile"), async (req, res) => {
         secure_url,
         format,
       });
-      res.status(200).json({ message: "File uploaded", file });
+      res.status(200).json({
+        id: file._id,
+        downloadPageLink: `${process.env.API_BASE_ENDPOINT_CLIENT}/download/${file._id}`,
+      });
     } catch (error: any) {
       console.error(error);
       res.status(500).json({ message: "Cloudinary Error" });
