@@ -1,11 +1,16 @@
 import DropBox from "./components/DropBox";
+import TopNav from "./components/TopNav";
+import { useState } from "react";
 
 const App = () => {
+  const [file, setFile] = useState(null);
+
   return (
-    <main className="flex flex-col h-screen justify-center m-auto">
-      <h1 className="text-5xl m-auto">SharePal</h1>
-      <div className="w-96 flex flex-col items-center m-auto bg-yellow-500">
-        <DropBox />
+    <main className="flex flex-col h-screen font-raleway ">
+      <TopNav />
+      <div className="justify-center m-auto w-96 bg-blue-200 rounded-md h-72 cursor-pointed">
+        <DropBox setFile={setFile} />
+        {file?.name}
       </div>
     </main>
   );
