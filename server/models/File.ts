@@ -2,6 +2,7 @@ import mongoose, { Document } from "mongoose";
 
 const Schema = mongoose.Schema;
 
+// Create Schema for File
 const fileSchema = new Schema(
   {
     filename: {
@@ -30,6 +31,7 @@ const fileSchema = new Schema(
   { timestamps: true }
 );
 
+// Create interface for File
 interface IFile extends Document {
   filename: String;
   secure_url: String;

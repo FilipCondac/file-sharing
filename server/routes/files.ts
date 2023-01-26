@@ -3,36 +3,43 @@ import multer from "multer";
 import File from "../models/File";
 import { UploadApiResponse, v2 as cloudinary } from "cloudinary";
 
+// Create Express router
 const router = express.Router();
-
+// Multer configuration
 const storage = multer.diskStorage({});
 
+// Multer middleware for handling file uploads
 let upload = multer({
   storage,
 });
 
+// @route POST /api/files/upload
+// This route is used to upload files to Cloudinary and save the file details to MongoDB
+// This uses the multer middleware to handle file uploads
 router.post("/upload", upload.single("myFile"), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ message: "No file uploaded" });
 
     console.log(req.file);
     let uploadedFile: UploadApiResponse;
-
+    // Upload file to Cloudinary
     try {
       uploadedFile = await cloudinary.uploader.upload(req.file.path, {
         folder: "file-sharing",
         resource_type: "auto",
       });
-
+      // Save file details to MongoDB
       const { originalname } = req.file;
       const { secure_url, bytes, format } = uploadedFile;
 
+      // Create new file document in MongoDB
       const file = await File.create({
         filename: originalname,
         sizeInBytes: bytes,
         secure_url,
         format,
       });
+      // Send response to client with file details and download link
       res.status(200).json({
         id: file._id,
         downloadPageLink: `${process.env.API_BASE_ENDPOINT_CLIENT}/download/${file._id}`,
