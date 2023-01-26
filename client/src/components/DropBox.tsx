@@ -23,11 +23,22 @@ const DropBox: React.FunctionComponent<{ setFile: React.Dispatch<any> }> = ({
     useDropzone({
       onDrop,
       multiple: false,
+      accept: {
+        "application/zip": [".zip", ".rar", ".7z"],
+        "application/pdf": [".pdf"],
+        "application/msword": [".doc", ".docx"],
+        "image/png": [".png"],
+        "image/jpeg": [".jpeg", ".jpg"],
+        "voice/mp3": [".mp3"],
+      },
     });
 
   return (
     // Apply the props to the dropzone element
-    <div {...getRootProps()} className="justify-centre items-center">
+    <div
+      {...getRootProps()}
+      className="justify-centre hover:wiggle h-full items-center"
+    >
       <input {...getInputProps()} />
       <div className="flex flex-col">
         <img
@@ -41,6 +52,7 @@ const DropBox: React.FunctionComponent<{ setFile: React.Dispatch<any> }> = ({
         ) : (
           <div className="m-auto">
             <p>Drag & Drop to upload</p>
+            <p>Accepts PNG, JPEG, JPG, MP3</p>
           </div>
         )}
       </div>
