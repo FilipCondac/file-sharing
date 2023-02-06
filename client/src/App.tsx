@@ -3,20 +3,21 @@ import TopNav from "./components/TopNav";
 import FileRender from "./components/FileRender";
 import { useState } from "react";
 import axios from "axios";
+import DownwloadFile from "./components/DownloadFile";
 
 const App = () => {
   //Call the useState hook to create a state variable called file
   //and a function called setFile to update the state variable
   const [file, setFile] = useState(null);
   const [id, setID] = useState(null);
-  const [downloadLink, setDownloadLink] = useState(null);
+  const [downloadPageLink, setdownloadPagelink] = useState(null);
   const [uploadingStatus, setUploadingStatus] = useState<
-    "Uploading" | "Upload Failed" | "Uploaded"
-  >(null);
+    "Uploading" | "Upload Failed" | "Uploaded" | "Upload"
+  >("Upload");
 
   const handleUpload = async () => {
     if (uploadingStatus === "Uploading") return;
-
+    setUploadingStatus("Uploading");
     const formData = new FormData();
     formData.append("myFile", file);
 
@@ -29,12 +30,17 @@ const App = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      setDownloadLink(data.downloadLink);
+      setdownloadPagelink(data.downloadPageLink);
       setID(data.id);
     } catch (error: any) {
       console.log(error.response.data);
       setUploadingStatus("Upload Failed");
     }
+  };
+
+  const resetComponent = () => {
+    setFile(null);
+    setdownloadPagelink(null);
   };
 
   return (
@@ -44,7 +50,7 @@ const App = () => {
         <h2 className="m-auto font-bold">Upload</h2>
         <div className="m-auto h-72 w-96 items-center rounded-md bg-blue-200">
           {/* Pass setFile updated variable to the DropBox component */}
-          <DropBox setFile={setFile} />
+          {!downloadPageLink && <DropBox setFile={setFile} />}
           <div className="m-0 bg-blue-200 text-center">
             {/* Display the file name */}
             {file && (
@@ -56,13 +62,26 @@ const App = () => {
                 }}
               />
             )}
-            <button
-              className="w-32 rounded-md bg-blue-400"
-              onClick={handleUpload}
-            >
-              Upload
-            </button>
+            {!downloadPageLink && file && (
+              <button
+                className="w-32 rounded-md bg-blue-400"
+                onClick={handleUpload}
+              >
+                {uploadingStatus}
+              </button>
+            )}
           </div>
+          {downloadPageLink && (
+            <div>
+              <DownwloadFile downloadPageLink={downloadPageLink} />
+              <button
+                className="w-32 rounded-md bg-blue-400"
+                onClick={resetComponent}
+              >
+                Upload new file
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </main>
