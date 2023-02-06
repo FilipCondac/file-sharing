@@ -1,4 +1,4 @@
-const DownwloadFile = ({ downloadPageLink }: any) => {
+const DownloadFile = ({ downloadPageLink }: any) => {
   return (
     <div className="p-1">
       <div className="flex">
@@ -13,4 +13,4 @@ const DownwloadFile = ({ downloadPageLink }: any) => {
   );
 };
 
-export default DownwloadFile;
+export default DownloadFile;

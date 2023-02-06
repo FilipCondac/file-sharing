@@ -3,14 +3,14 @@ import TopNav from "./components/TopNav";
 import FileRender from "./components/FileRender";
 import { useState } from "react";
 import axios from "axios";
-import DownwloadFile from "./components/DownloadFile";
+import DownloadFile from "./components/DownloadFile";
 
 const App = () => {
   //Call the useState hook to create a state variable called file
   //and a function called setFile to update the state variable
   const [file, setFile] = useState(null);
   const [id, setID] = useState(null);
-  const [downloadPageLink, setdownloadPagelink] = useState(null);
+  const [downloadPageLink, setdownloadPageLink] = useState(null);
   const [uploadingStatus, setUploadingStatus] = useState<
     "Uploading" | "Upload Failed" | "Uploaded" | "Upload"
   >("Upload");
@@ -30,7 +30,7 @@ const App = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      setdownloadPagelink(data.downloadPageLink);
+      setdownloadPageLink(data.downloadPageLink);
       setID(data.id);
     } catch (error: any) {
       console.log(error.response.data);
@@ -40,7 +40,7 @@ const App = () => {
 
   const resetComponent = () => {
     setFile(null);
-    setdownloadPagelink(null);
+    setdownloadPageLink(null);
   };
 
   return (
@@ -73,7 +73,7 @@ const App = () => {
           </div>
           {downloadPageLink && (
             <div>
-              <DownwloadFile downloadPageLink={downloadPageLink} />
+              <DownloadFile downloadPageLink={downloadPageLink} />
               <button
                 className="w-32 rounded-md bg-blue-400"
                 onClick={resetComponent}
