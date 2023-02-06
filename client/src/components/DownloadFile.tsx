@@ -4,8 +4,8 @@ const DownloadFile = ({ downloadPageLink }: any) => {
       <div className="flex">
         <span className="break-all"> {downloadPageLink}</span>
         <img
-          src="/images/icons/logo.png"
-          className="h-8 w-8 cursor-pointer object-contain"
+          src="/images/icons/copy-solid.svg"
+          className="object-contain w-8 h-8 cursor-pointer"
           onClick={() => navigator.clipboard.writeText(downloadPageLink)}
         ></img>
       </div>
