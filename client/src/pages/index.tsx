@@ -1,9 +1,9 @@
-import DropBox from "./components/DropBox";
-import TopNav from "./components/TopNav";
-import FileRender from "./components/FileRender";
+import DropBox from "@/components/DropBox";
+import TopNav from "@/components/TopNav";
+import FileRender from "@/components/FileRender";
 import { useState } from "react";
 import axios from "axios";
-import DownloadFile from "./components/DownloadFile";
+import DownloadFile from "@/components/DownloadFile";
 
 const App = () => {
   //Call the useState hook to create a state variable called file
@@ -44,14 +44,14 @@ const App = () => {
   };
 
   return (
-    <main className="flex h-screen flex-col font-raleway ">
+    <main className="flex flex-col h-screen font-raleway ">
       <TopNav />
-      <div className="m-auto flex flex-col">
+      <div className="flex flex-col m-auto">
         <h2 className="m-auto font-bold">Upload</h2>
-        <div className="m-auto h-72 w-96 items-center rounded-md bg-blue-200">
+        <div className="items-center m-auto bg-blue-200 rounded-md h-72 w-96">
           {/* Pass setFile updated variable to the DropBox component */}
           {!downloadPageLink && <DropBox setFile={setFile} />}
-          <div className="m-0 bg-blue-200 text-center">
+          <div className="m-0 text-center bg-blue-200">
             {/* Display the file name */}
             {file && (
               <FileRender
@@ -64,7 +64,7 @@ const App = () => {
             )}
             {!downloadPageLink && file && (
               <button
-                className="w-32 rounded-md bg-blue-400"
+                className="w-32 bg-blue-400 rounded-md"
                 onClick={handleUpload}
               >
                 {uploadingStatus}
@@ -75,7 +75,7 @@ const App = () => {
             <div>
               <DownloadFile downloadPageLink={downloadPageLink} />
               <button
-                className="w-32 rounded-md bg-blue-400"
+                className="w-32 bg-blue-400 rounded-md"
                 onClick={resetComponent}
               >
                 Upload new file

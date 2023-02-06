@@ -56,8 +56,9 @@ router.post("/upload", upload.single("myFile"), async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = req.params;
     const file = await File.findById(id);
+    console.log("working");
     if (!file) {
       return res.status(404).json({ message: "File does not exist" });
     }
