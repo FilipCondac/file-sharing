@@ -1,8 +1,11 @@
-const DownloadFile = ({ downloadPageLink }: any) => {
+import React from "react";
+
+const DownloadFile = ({ downloadPageLink, phrase }): any => {
   return (
     <div className="p-1">
       <div className="flex">
         <span className="break-all"> {downloadPageLink}</span>
+        <span className="w-full"> {phrase} </span>
         <img
           src="/images/icons/copy-solid.svg"
           className="object-contain w-8 h-8 cursor-pointer"

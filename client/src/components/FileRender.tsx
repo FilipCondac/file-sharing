@@ -7,15 +7,16 @@ const RenderFile: React.FunctionComponent<{ file: IFile }> = ({
   file: { format, sizeInBytes, name },
 }) => {
   return (
-    <div className="flex w-full p-4 my-2 font-bold">
-      <img
-        src={createImageUri(`/images/icons/${format}.png`)}
-        alt=""
-        className="w-auto h-10"
-      />
-      <div className="flex flex-col float-left">
-        <span className="mx-2 mt-3">Name: {name}</span>
-        <span className="mx-2 mt-3">Size: {calcBytes(sizeInBytes)}</span>
+    <div className="flex flex-col w-full -mt-6 font-bold">
+      <div className="flex flex-col ">
+        <span className="m-6 mt-3 text-center ">Name: {name}</span>
+        <div className="flex m-auto mt-0">
+          <span className="">Format: {format.toUpperCase()} </span>
+          <img src={`/images/icons/${format}.png`} alt="" className="w-6 h-6" />
+        </div>
+        <span className="m-auto mt-3 text-center">
+          Size: {calcBytes(sizeInBytes)}
+        </span>
       </div>
     </div>
   );

@@ -8,6 +8,8 @@ const router = express.Router();
 // Multer configuration
 const storage = multer.diskStorage({});
 
+const randomWords = require("random-words");
+
 // Multer middleware for handling file uploads
 let upload = multer({
   storage,
@@ -31,17 +33,21 @@ router.post("/upload", upload.single("myFile"), async (req, res) => {
       // Save file details to MongoDB
       const { originalname } = req.file;
       const { secure_url, bytes, format } = uploadedFile;
-
+      const wordPhrase = randomWords({ exactly: 3, join: " " });
+      // console.log(randomWords());
       // Create new file document in MongoDB
       const file = await File.create({
         filename: originalname,
         sizeInBytes: bytes,
+        phrase: wordPhrase,
         secure_url,
         format,
       });
+
       // Send response to client with file details and download link
       res.status(200).json({
         id: file._id,
+        phrase: wordPhrase,
         downloadPageLink: `${process.env.API_BASE_ENDPOINT_CLIENT}/download/${file._id}`,
       });
     } catch (error: any) {

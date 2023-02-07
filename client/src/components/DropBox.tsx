@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
+import React from "react";
 
 const DropBox: React.FunctionComponent<{ setFile: React.Dispatch<any> }> = ({
   setFile,
@@ -24,9 +25,9 @@ const DropBox: React.FunctionComponent<{ setFile: React.Dispatch<any> }> = ({
       onDrop,
       multiple: false,
       accept: {
-        "application/zip": [".zip", ".rar", ".7z"],
+        // "application/zip": [".zip", ".rar", ".7z"],
+        // "application/msword": [".doc", ".docx"],
         "application/pdf": [".pdf"],
-        "application/msword": [".doc", ".docx"],
         "image/png": [".png"],
         "image/jpeg": [".jpeg", ".jpg"],
         "voice/mp3": [".mp3"],
@@ -37,22 +38,26 @@ const DropBox: React.FunctionComponent<{ setFile: React.Dispatch<any> }> = ({
     // Apply the props to the dropzone element
     <div
       {...getRootProps()}
-      className="justify-centre hover:wiggle h-full items-center"
+      className="items-center h-full justify-centre hover:wiggle"
     >
       <input {...getInputProps()} />
       <div className="flex flex-col">
         <img
           src="/images/icons/folder.png"
           alt="folder"
-          className="m-auto h-16 w-16"
+          className="w-16 h-16 m-auto"
         ></img>
         {/* Add check if files are not accepted display message to user */}
         {isDragReject ? (
           <p>File type not accepted</p>
         ) : (
-          <div className="m-auto">
-            <p>Drag & Drop to upload</p>
-            <p>Accepts PNG, JPEG, JPG, MP3</p>
+          <div className="flex flex-col m-auto">
+            <p className="w-3/5 m-auto text-center">
+              Drag & Drop a file or click this box to begin upload
+            </p>
+            <p className="w-3/5 m-auto text-center mt-28">
+              Accepts PNG, JPEG, JPG, MP3 & PDF
+            </p>
           </div>
         )}
       </div>

@@ -4,6 +4,7 @@ import FileRender from "@/components/FileRender";
 import { useState } from "react";
 import axios from "axios";
 import DownloadFile from "@/components/DownloadFile";
+import React from "react";
 
 const App = () => {
   //Call the useState hook to create a state variable called file
@@ -11,6 +12,7 @@ const App = () => {
   const [file, setFile] = useState(null);
   const [id, setID] = useState(null);
   const [downloadPageLink, setdownloadPageLink] = useState(null);
+  const [phrase, setPhrase] = useState(null);
   const [uploadingStatus, setUploadingStatus] = useState<
     "Uploading" | "Upload Failed" | "Uploaded" | "Upload"
   >("Upload");
@@ -31,27 +33,29 @@ const App = () => {
         },
       });
       setdownloadPageLink(data.downloadPageLink);
+      setPhrase(data.phrase);
       setID(data.id);
     } catch (error: any) {
-      console.log(error.response.data);
+      console.log(error);
       setUploadingStatus("Upload Failed");
     }
   };
 
   const resetComponent = () => {
     setFile(null);
+    setPhrase(null);
     setdownloadPageLink(null);
   };
 
   return (
-    <main className="flex flex-col h-screen font-raleway ">
+    <main className="flex flex-col h-screen text-black font-raleway ">
       <TopNav />
       <div className="flex flex-col m-auto">
         <h2 className="m-auto font-bold">Upload</h2>
         <div className="items-center m-auto bg-blue-200 rounded-md h-72 w-96">
           {/* Pass setFile updated variable to the DropBox component */}
           {!downloadPageLink && <DropBox setFile={setFile} />}
-          <div className="m-0 text-center bg-blue-200">
+          <div className="text-center bg-blue-200 rounded-md ">
             {/* Display the file name */}
             {file && (
               <FileRender
@@ -73,7 +77,10 @@ const App = () => {
           </div>
           {downloadPageLink && (
             <div>
-              <DownloadFile downloadPageLink={downloadPageLink} />
+              <DownloadFile
+                downloadPageLink={downloadPageLink}
+                phrase={phrase}
+              />
               <button
                 className="w-32 bg-blue-400 rounded-md"
                 onClick={resetComponent}
