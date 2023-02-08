@@ -17,6 +17,10 @@ const fileSchema = new Schema(
       type: String,
       required: true,
     },
+    phrase: {
+      type: String,
+      required: true,
+    },
     sizeInBytes: {
       type: Number,
       required: true,
@@ -36,6 +40,7 @@ interface IFile extends Document {
   filename: String;
   secure_url: String;
   format: String;
+  phrase: String;
   sizeInBytes: String;
   sender?: String;
   receiver?: String;

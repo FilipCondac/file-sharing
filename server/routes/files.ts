@@ -22,7 +22,6 @@ router.post("/upload", upload.single("myFile"), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ message: "No file uploaded" });
 
-    console.log(req.file);
     let uploadedFile: UploadApiResponse;
     // Upload file to Cloudinary
     try {
@@ -33,8 +32,7 @@ router.post("/upload", upload.single("myFile"), async (req, res) => {
       // Save file details to MongoDB
       const { originalname } = req.file;
       const { secure_url, bytes, format } = uploadedFile;
-      const wordPhrase = randomWords({ exactly: 3, join: " " });
-      // console.log(randomWords());
+      const wordPhrase = await randomWords({ exactly: 3, join: " " });
       // Create new file document in MongoDB
       const file = await File.create({
         filename: originalname,
