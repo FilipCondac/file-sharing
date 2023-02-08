@@ -33,6 +33,7 @@ router.post("/upload", upload.single("myFile"), async (req, res) => {
       const { originalname } = req.file;
       const { secure_url, bytes, format } = uploadedFile;
       const wordPhrase = await randomWords({ exactly: 3, join: " " });
+
       // Create new file document in MongoDB
       const file = await File.create({
         filename: originalname,

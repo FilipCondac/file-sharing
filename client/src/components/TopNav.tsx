@@ -1,11 +1,13 @@
-const TopNav = () => {
+import React from "react";
+
+const TopNav: React.FC = () => {
   return (
-    <div className="h-16 w-full p-0">
+    <div className="w-full h-16 p-0">
       <div className="float-left -mt-16 overflow-hidden">
         <img
           src="/images/logo.png"
           alt="logo"
-          className="h-48 w-64 overflow-hidden object-cover"
+          className="object-cover w-64 h-48 overflow-hidden"
         ></img>
       </div>
       <div className="float-right m-3 mt-1 text-lg font-bold">

@@ -1,6 +1,6 @@
-import React from "react";
+import React, { ReactElement } from "react";
 
-const DownloadFile = ({ downloadPageLink, phrase }): any => {
+const DownloadFile: React.FC = ({ downloadPageLink, phrase }): ReactElement => {
   return (
     <div className="p-1">
       <div className="flex">

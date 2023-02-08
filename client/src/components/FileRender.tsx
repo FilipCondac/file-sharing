@@ -1,7 +1,8 @@
-import { FunctionComponent } from "react";
+// import { FunctionComponent } from "react";
+// import { createImageUri } from "../../libs/imageURI";
 import { IFile } from "../../libs/types";
-import { createImageUri } from "../../libs/imageURI";
 import { calcBytes } from "../../libs/calcBytes";
+import React from "react";
 
 const RenderFile: React.FunctionComponent<{ file: IFile }> = ({
   file: { format, sizeInBytes, name },

@@ -1,7 +1,8 @@
-import axios from "axios";
 import { GetServerSidePropsContext, NextPage } from "next";
 import { IFile } from "libs/types";
 import FileRender from "@/components/FileRender";
+import axios from "axios";
+import React from "react";
 
 const index: NextPage<{ file: IFile }> = ({
   file: { format, name, sizeInBytes, id },
@@ -30,7 +31,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
     const { data } = await axios.get(`http://localhost:8000/api/files/${id}`);
     file = data;
-  } catch (error) {
+  } catch (error: any) {
     console.log(error.response.data);
     file = {};
   }
