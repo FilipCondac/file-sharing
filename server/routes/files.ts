@@ -60,7 +60,27 @@ router.post("/upload", upload.single("myFile"), async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/phrase/:phrase", async (req, res) => {
+  try {
+    const wordPhrase = req.params.phrase;
+    const file = await File.find({ phrase: wordPhrase });
+    if (!file) {
+      return res.status(404).json({ message: "File does not exist" });
+    }
+
+    const { filename, format, sizeInBytes, id } = file[0];
+    return res.status(200).json({
+      name: filename,
+      format,
+      sizeInBytes,
+      id,
+    });
+  } catch (error: any) {
+    return res.status(500).json({ message: "Server Error finding by phrase" });
+  }
+});
+
+router.get("/id/:id", async (req, res) => {
   try {
     const id = req.params.id;
     const file = await File.findById(id);
@@ -76,26 +96,7 @@ router.get("/:id", async (req, res) => {
       id,
     });
   } catch (error) {
-    return res.status(500).json({ message: "Server Error" });
-  }
-});
-
-router.get("findByPhrase/:phrase", async (req, res) => {
-  try {
-    const wordPhrase = req.params.phrase;
-    const file = await File.findOne({ wordPhrase });
-    if (!file) {
-      return res.status(404).json({ message: "File does not exist" });
-    }
-    const { filename, format, sizeInBytes, id } = file;
-    return res.status(200).json({
-      name: filename,
-      format,
-      sizeInBytes,
-      id,
-    });
-  } catch (error: any) {
-    return res.status(500).json({ message: "Server Error" });
+    return res.status(500).json({ message: "Server Error finding by ID" });
   }
 });
 

@@ -36,10 +36,12 @@ const index: NextPage<{ file: IFile }> = ({
 export default index;
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { id } = context.query;
+  const { phrase } = context.query;
   let file;
   try {
-    const { data } = await axios.get(`http://localhost:8000/api/files/${id}`);
+    const { data } = await axios.get(
+      `http://localhost:8000/api/files/phrase/${phrase}`
+    );
     file = data;
   } catch (error: any) {
     console.log(error.response.data);
