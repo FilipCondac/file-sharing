@@ -48,14 +48,13 @@ const App = () => {
   };
 
   return (
-    <main className="flex flex-col h-screen text-black font-raleway ">
+    <main className="flex flex-col h-full font-raleway dark [--scroll-mt:9.875rem] lg:[--scroll-mt:6.3125rem] dark:bg-slate-900 text-sky-400 ">
       <TopNav />
       <div className="flex flex-col m-auto">
-        <h2 className="m-auto font-bold">Upload</h2>
-        <div className="items-center m-auto bg-blue-200 rounded-md h-72 w-96">
+        <div className="items-center m-auto rounded-md h-72 w-96">
           {/* Pass setFile updated variable to the DropBox component */}
-          {!downloadPageLink && <DropBox setFile={setFile} />}
-          <div className="text-center bg-blue-200 rounded-md ">
+          {!file && <DropBox setFile={setFile} />}
+          <div className="m-auto text-center rounded-md ">
             {/* Display the file name */}
             {file && (
               <FileRender
@@ -68,7 +67,7 @@ const App = () => {
             )}
             {!downloadPageLink && file && (
               <button
-                className="w-32 bg-blue-400 rounded-md"
+                className="w-32 m-auto text-white rounded-md bg-sky-400"
                 onClick={handleUpload}
               >
                 {uploadingStatus}
@@ -76,13 +75,13 @@ const App = () => {
             )}
           </div>
           {downloadPageLink && (
-            <div>
+            <div className="m-auto">
               <DownloadFile
                 downloadPageLink={downloadPageLink}
                 phrase={phrase}
               />
               <button
-                className="w-32 bg-blue-400 rounded-md"
+                className="px-2 mt-5 ml-32 text-center bg-blue-400 rounded-md"
                 onClick={resetComponent}
               >
                 Upload new file

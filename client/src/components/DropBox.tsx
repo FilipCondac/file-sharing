@@ -33,13 +33,20 @@ const DropBox: React.FunctionComponent<{ setFile: React.Dispatch<any> }> = ({
         "voice/mp3": [".mp3"],
       },
     });
+  let mainClass =
+    "items-center h-full shadow-[0_20px_60px_20px_rgba(135,206,235,0.1)] text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre hover:wiggle";
+
+  if (isDragReject) {
+    mainClass =
+      "items-center h-full shadow-[0_20px_60px_20px_rgba(255,100,0,0.1)] text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre hover:wiggle";
+  } else if (isDragAccept) {
+    mainClass =
+      "items-center h-full shadow-[0_20px_60px_20px_rgba(0,255,0,0.1)] text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre hover:wiggle";
+  }
 
   return (
     // Apply the props to the dropzone element
-    <div
-      {...getRootProps()}
-      className="items-center h-full justify-centre hover:wiggle"
-    >
+    <div {...getRootProps()} className={mainClass}>
       <input {...getInputProps()} />
       <div className="flex flex-col">
         <img
@@ -49,7 +56,7 @@ const DropBox: React.FunctionComponent<{ setFile: React.Dispatch<any> }> = ({
         ></img>
         {/* Add check if files are not accepted display message to user */}
         {isDragReject ? (
-          <p>File type not accepted</p>
+          <p className="m-auto">File type not accepted</p>
         ) : (
           <div className="flex flex-col m-auto">
             <p className="w-3/5 m-auto text-center">

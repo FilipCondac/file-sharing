@@ -2,6 +2,7 @@ import express from "express";
 import multer from "multer";
 import File from "../models/File";
 import { UploadApiResponse, v2 as cloudinary } from "cloudinary";
+import https from "https";
 
 // Create Express router
 const router = express.Router();
@@ -32,7 +33,7 @@ router.post("/upload", upload.single("myFile"), async (req, res) => {
       // Save file details to MongoDB
       const { originalname } = req.file;
       const { secure_url, bytes, format } = uploadedFile;
-      const wordPhrase = await randomWords({ exactly: 3, join: " " });
+      const wordPhrase = await randomWords({ exactly: 3, join: "" });
 
       // Create new file document in MongoDB
       const file = await File.create({
@@ -75,7 +76,44 @@ router.get("/:id", async (req, res) => {
       id,
     });
   } catch (error) {
-    return res.status(500).json({ message: "Server Error :(" });
+    return res.status(500).json({ message: "Server Error" });
+  }
+});
+
+router.get("findByPhrase/:phrase", async (req, res) => {
+  try {
+    const wordPhrase = req.params.phrase;
+    const file = await File.findOne({ wordPhrase });
+    if (!file) {
+      return res.status(404).json({ message: "File does not exist" });
+    }
+    const { filename, format, sizeInBytes, id } = file;
+    return res.status(200).json({
+      name: filename,
+      format,
+      sizeInBytes,
+      id,
+    });
+  } catch (error: any) {
+    return res.status(500).json({ message: "Server Error" });
+  }
+});
+
+router.get("/:id/download", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const file = await File.findById(id);
+    if (!file) {
+      return res.status(404).json({ message: "File does not exist" });
+    }
+
+    // Download file from Cloudinary
+    let url: any = file.secure_url;
+    https.get(url, (fileStream) => {
+      fileStream.pipe(res);
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Server Error" });
   }
 });
 

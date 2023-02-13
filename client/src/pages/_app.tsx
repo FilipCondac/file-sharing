@@ -6,7 +6,7 @@ axios.defaults.baseURL = "http://localhost:8000/";
 
 function MyApp({ Component, pageProps }: any) {
   return (
-    <div className="grid h-screen font-serif text-white">
+    <div className="grid h-screen min-h-full font-serif text-white">
       <div>
         <Component {...pageProps} />
       </div>
