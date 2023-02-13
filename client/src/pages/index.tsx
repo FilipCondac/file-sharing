@@ -1,6 +1,7 @@
 import DropBox from "@/components/DropBox";
 import TopNav from "@/components/TopNav";
 import FileRender from "@/components/FileRender";
+import PhraseSearch from "@/components/PhraseSearch";
 import { useState } from "react";
 import axios from "axios";
 import DownloadFile from "@/components/DownloadFile";
@@ -50,6 +51,7 @@ const App = () => {
   return (
     <main className="flex flex-col h-full font-raleway dark [--scroll-mt:9.875rem] lg:[--scroll-mt:6.3125rem] dark:bg-slate-900 text-sky-400 ">
       <TopNav />
+      <PhraseSearch />
       <div className="flex flex-col m-auto">
         <div className="items-center m-auto rounded-md h-72 w-96">
           {/* Pass setFile updated variable to the DropBox component */}

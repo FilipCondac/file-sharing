@@ -48,7 +48,7 @@ router.post("/upload", upload.single("myFile"), async (req, res) => {
       res.status(200).json({
         id: file._id,
         phrase: wordPhrase,
-        downloadPageLink: `${process.env.API_BASE_ENDPOINT_CLIENT}/download/${file._id}`,
+        downloadPageLink: `${process.env.API_BASE_ENDPOINT_CLIENT}/download/id/${file._id}`,
       });
     } catch (error: any) {
       console.error(error);
@@ -100,7 +100,7 @@ router.get("/id/:id", async (req, res) => {
   }
 });
 
-router.get("/:id/download", async (req, res) => {
+router.get("/id/:id/download", async (req, res) => {
   try {
     const id = req.params.id;
     const file = await File.findById(id);

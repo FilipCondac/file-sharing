@@ -10,7 +10,7 @@ const index: NextPage<{ file: IFile }> = ({
 }: any) => {
   const handleDownload = async () => {
     const { data } = await axios.get(
-      `http://localhost:8000/api/files/${id}/download`,
+      `http://localhost:8000/api/files/id/${id}/download`,
       {
         responseType: "blob",
       }
