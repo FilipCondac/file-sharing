@@ -10,6 +10,7 @@ import React from "react";
 const App = () => {
   //Call the useState hook to create a state variable called file
   //and a function called setFile to update the state variable
+  const [componentRender, setComponentRender] = useState(true);
   const [file, setFile] = useState(null);
   const [id, setID] = useState(null);
   const [downloadPageLink, setdownloadPageLink] = useState(null);
@@ -48,12 +49,6 @@ const App = () => {
     setdownloadPageLink(null);
   };
 
-  let [componentRender, setComponentRender] = useState(true);
-
-  const hideComponent = () => {
-    componentRender = false;
-  };
-
   return (
     <main className="flex flex-col h-full font-raleway dark [--scroll-mt:9.875rem] lg:[--scroll-mt:6.3125rem] dark:bg-slate-900 text-sky-400 ">
       <TopNav />
@@ -62,7 +57,7 @@ const App = () => {
           <h1 className="m-auto mb-5 text-lg font-bold text-center text-gray-400">
             Search files by phrase
           </h1>
-          <PhraseSearch setComponentRender={hideComponent} />
+          <PhraseSearch setComponentRender={setComponentRender} />
         </div>
       )}
       <div className="flex flex-col m-auto">

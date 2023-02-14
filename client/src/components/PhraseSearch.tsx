@@ -19,7 +19,7 @@ const PhraseSearch: React.FC<Props> = (props: any) => {
       );
       file = data;
       setFile(file);
-      props.hideComponent(true);
+      props.setComponentRender(false);
       console.log(file);
     } catch (error: any) {
       console.log(error);
