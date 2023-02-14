@@ -9,9 +9,9 @@ interface Props {}
 const PhraseSearch: React.FC<Props> = () => {
   const [searchTerm, setSearchTerm] = useState("");
   let [file, setFile] = useState(null);
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-
     const phrase = searchTerm;
     try {
       const { data } = await axios.get(

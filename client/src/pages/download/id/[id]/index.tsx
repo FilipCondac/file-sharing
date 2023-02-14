@@ -18,12 +18,12 @@ const index: NextPage<{ file: IFile }> = ({
     fileDownload(data, name);
   };
   return (
-    <div className="flex flex-col items-center w-full text-xl text-black">
+    <div className="flex flex-col items-center w-full text-xl text-black ">
       {!id ? (
         <span>File does not exist</span>
       ) : (
         <>
-          <img src="https://img.icons8.com/ios/50/000000/pdf-2.png" />
+          <img className="w-12 h-auto" src={`/images/icons/${format}.png`} />
           <h1>File ready for download</h1>
           <FileRender file={{ format, name, sizeInBytes }} />
           <button onClick={handleDownload}>Download</button>

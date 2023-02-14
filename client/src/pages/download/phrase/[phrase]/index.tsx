@@ -23,7 +23,7 @@ const index: NextPage<{ file: IFile }> = ({
         <span>File does not exist</span>
       ) : (
         <>
-          <img src="https://img.icons8.com/ios/50/000000/pdf-2.png" />
+          <img src={`/images/icons/${format}.png`} />
           <h1>File ready for download</h1>
           <FileRender file={{ format, name, sizeInBytes }} />
           <button onClick={handleDownload}>Download</button>
