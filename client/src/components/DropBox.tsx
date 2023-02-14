@@ -34,7 +34,7 @@ const DropBox: React.FunctionComponent<{ setFile: React.Dispatch<any> }> = ({
       },
     });
   let mainClass =
-    "items-center h-full shadow-[0_20px_60px_20px_rgba(135,206,235,0.1)] text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre hover:wiggle";
+    "items-center h-full shadow-[0_20px_60px_20px_rgba(135,206,235,0.1)] text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre hover:shadow-[0_20px_60px_20px_rgba(235,206,235,0.2)]";
 
   if (isDragReject) {
     mainClass =

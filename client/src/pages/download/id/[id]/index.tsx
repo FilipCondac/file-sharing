@@ -1,6 +1,7 @@
 import { GetServerSidePropsContext, NextPage } from "next";
 import { IFile } from "libs/types";
 import FileRender from "@/components/FileRender";
+import TopNav from "@/components/TopNav";
 import fileDownload from "js-file-download";
 import axios from "axios";
 import React from "react";
@@ -18,15 +19,33 @@ const index: NextPage<{ file: IFile }> = ({
     fileDownload(data, name);
   };
   return (
-    <div className="flex flex-col items-center w-full text-xl text-black ">
+    <div className="flex flex-col items-center h-full text-xl text-black bg-slate-900">
+      <TopNav />
       {!id ? (
         <span>File does not exist</span>
       ) : (
         <>
-          <img className="w-12 h-auto" src={`/images/icons/${format}.png`} />
-          <h1>File ready for download</h1>
-          <FileRender file={{ format, name, sizeInBytes }} />
-          <button onClick={handleDownload}>Download</button>
+          <div className="m-auto">
+            <h1 className="mb-6 font-bold text-gray-300 uppercase">
+              Your file is ready for download
+            </h1>
+            <FileRender file={{ format, name, sizeInBytes }} />
+            <div className="m-auto mt-10 text-center">
+              <button
+                className="inline-flex items-center px-4 py-2 font-bold text-gray-800 bg-gray-300 rounded hover:bg-gray-400"
+                onClick={handleDownload}
+              >
+                <svg
+                  className="w-4 h-4 mr-2 fill-current"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
+                </svg>
+                <span>Download</span>
+              </button>
+            </div>
+          </div>
         </>
       )}
     </div>
