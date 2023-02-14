@@ -8,9 +8,8 @@ import https from "https";
 const router = express.Router();
 // Multer configuration
 const storage = multer.diskStorage({});
-
+// Import random words package
 const randomWords = require("random-words");
-
 // Multer middleware for handling file uploads
 let upload = multer({
   storage,
@@ -33,13 +32,16 @@ router.post("/upload", upload.single("myFile"), async (req, res) => {
       // Save file details to MongoDB
       const { originalname } = req.file;
       const { secure_url, bytes, format } = uploadedFile;
-      const wordPhrase = await randomWords({ exactly: 3, join: "" });
+
+      //Generate random phrase and pass to db with removed spaces
+      const wordPhrase = await randomWords({ exactly: 3, join: " " });
+      const dbPhrase = wordPhrase.replace(/\s/g, "");
 
       // Create new file document in MongoDB
       const file = await File.create({
         filename: originalname,
         sizeInBytes: bytes,
-        phrase: wordPhrase,
+        phrase: dbPhrase,
         secure_url,
         format,
       });
@@ -60,6 +62,8 @@ router.post("/upload", upload.single("myFile"), async (req, res) => {
   }
 });
 
+// @route GET /api/files/phrase/:phrase - This route is used to get file details by phrase
+//The phrase is passed in the URL and the file details are returned
 router.get("/phrase/:phrase", async (req, res) => {
   try {
     const wordPhrase = req.params.phrase;
@@ -80,6 +84,8 @@ router.get("/phrase/:phrase", async (req, res) => {
   }
 });
 
+// @route GET /api/files/id/:id - This route is used to get file details by ID
+//The ID is passed in the URL and the file details are returned
 router.get("/id/:id", async (req, res) => {
   try {
     const id = req.params.id;
@@ -100,6 +106,9 @@ router.get("/id/:id", async (req, res) => {
   }
 });
 
+// @route GET /api/files/id/:id/download - This route is used to download a file. This route is used by the client to download the file
+// The ID is passed in the URL and the file is downloaded
+// This is used by both search by phrase and search by ID
 router.get("/id/:id/download", async (req, res) => {
   try {
     const id = req.params.id;
@@ -114,7 +123,9 @@ router.get("/id/:id/download", async (req, res) => {
       fileStream.pipe(res);
     });
   } catch (error) {
-    return res.status(500).json({ message: "Server Error" });
+    return res
+      .status(500)
+      .json({ message: "Server Error while trying to download file" });
   }
 });
 

@@ -33,9 +33,10 @@ const DropBox: React.FunctionComponent<{ setFile: React.Dispatch<any> }> = ({
         "voice/mp3": [".mp3"],
       },
     });
+
+  // Set the main class to the default class and change it if the file is accepted or rejected
   let mainClass =
     "items-center h-full shadow-[0_20px_60px_20px_rgba(135,206,235,0.1)] text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre hover:shadow-[0_20px_60px_20px_rgba(235,206,235,0.2)]";
-
   if (isDragReject) {
     mainClass =
       "items-center h-full shadow-[0_20px_60px_20px_rgba(255,100,0,0.1)] text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre hover:wiggle";

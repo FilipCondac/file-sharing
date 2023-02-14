@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { calcBytes } from "libs/calcBytes";
-// import FileRender from "@/components/FileRender";
 import fileDownload from "js-file-download";
 
 interface Props {}
@@ -10,9 +9,19 @@ const PhraseSearch: React.FC<Props> = (props: any) => {
   const [searchTerm, setSearchTerm] = useState("");
   let [file, setFile] = useState(null);
 
+  //   * The bellow above does the following:
+  // 1. An async function is created and the event passed in as a parameter.
+  // 2. The default action of the event is prevented.
+  // 3. The search term is saved as a variable and the spaces are removed.
+  // 4. The variable is saved as lowercase.
+  // 5. An axios request is made to the server.
+  // 6. The data is saved as a variable.
+  // 7. The file state is updated with the data.
+  // 8. The componentRender state is set to false to hide the SearchForm component. */
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const phrase = searchTerm;
+    const phrase = searchTerm.replace(/\s/g, "").toLowerCase();
     try {
       const { data } = await axios.get(
         `http://localhost:8000/api/files/phrase/${phrase}`
@@ -20,11 +29,15 @@ const PhraseSearch: React.FC<Props> = (props: any) => {
       file = data;
       setFile(file);
       props.setComponentRender(false);
-      console.log(file);
     } catch (error: any) {
       console.log(error);
     }
   };
+
+  /* The bellow above does the following:
+1. It makes an axios request to the backend and gets a blob of data
+2. Then it uses the fileDownload library to download the data to the browser
+3. After the download is complete, it resets the component */
 
   const handleDownload = async () => {
     const { data } = await axios.get(
@@ -36,16 +49,18 @@ const PhraseSearch: React.FC<Props> = (props: any) => {
     fileDownload(data, file.name);
   };
 
+  /* The bellow bellow does the following:
+1. It resets the component by setting the file state to null and the componentRender state to true */
   const resetComponent = () => {
     setFile(null);
     props.setComponentRender(true);
   };
 
   return (
-    <div
-      className="flex flex-col p-5 m-auto mb-10 items-center shadow-[0_20px_60px_20px_rgba(135,206,235,0.1)] text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre hover:shadow-[0_20px_60px_20px_rgba(235,206,235,0.2)]
-    "
-    >
+    <div className="flex flex-col p-5 m-auto mb-10 items-center shadow-[0_20px_60px_20px_rgba(135,206,235,0.1)] text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre hover:shadow-[0_20px_60px_20px_rgba(235,206,235,0.2)]">
+      {/* The code bellow does the following:
+    1. It checks if the file variable is undefined or not. If it is undefined, then it shows a form to search for the file.
+    2. If the file variable is defined, then it shows the file contents. */}
       {!file && (
         <div>
           <form onSubmit={handleSubmit}>
@@ -63,6 +78,11 @@ const PhraseSearch: React.FC<Props> = (props: any) => {
         </div>
       )}
 
+      {/* The code bellow does the following:
+        1. A function called resetComponent is called when the user clicks on the close button.
+        2. The function resets the file state variable to null, which triggers the change in the conditional rendering.
+        3. The file details are displayed to the user.
+        4. The user can download the file. */}
       {file && (
         <div className="flex flex-col items-center w-full h-full pb-5 text-white justify-centre">
           <div className="flex flex-col ">

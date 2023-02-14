@@ -35,6 +35,7 @@ const index: NextPage<{ file: IFile }> = ({
 
 export default index;
 
+// This gets called to query via phrase
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { phrase } = context.query;
   let file;

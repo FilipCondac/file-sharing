@@ -19,6 +19,16 @@ const App = () => {
     "Uploading" | "Upload Failed" | "Uploaded" | "Upload"
   >("Upload");
 
+  /* The code bellow does the following:
+1. The handleUpload function is called when the user clicks the upload button.
+2. The handleUpload function checks if the upload status is currently uploading, if it is, then it does not do anything.
+3. The handleUpload function sets the upload status to uploading.
+4. The handleUpload function creates a new form data object.
+5. The handleUpload function appends the file to the form data object.
+6. The handleUpload function creates an axios request with the form data.
+7. The handleUpload function sends the axios request to the API.
+8. The handleUpload function sets the downloadPageLink, phrase, and id to the data recieved from the API. */
+
   const handleUpload = async () => {
     if (uploadingStatus === "Uploading") return;
     setUploadingStatus("Uploading");
@@ -43,6 +53,8 @@ const App = () => {
     }
   };
 
+  // The code bellow does the following:
+  // 1. The resetComponent function is called when the user clicks the x button.
   const resetComponent = () => {
     setFile(null);
     setPhrase(null);
@@ -60,6 +72,7 @@ const App = () => {
           <PhraseSearch setComponentRender={setComponentRender} />
         </div>
       )}
+
       <div className="flex flex-col m-auto">
         <div className="m-auto rounded-md h-72 w-96">
           {/* Pass setFile updated variable to the DropBox component */}
@@ -82,6 +95,7 @@ const App = () => {
               </svg>
             </div>
           )}
+
           <div className="m-auto rounded-md ">
             {/* Display the file name */}
             {file && (
@@ -93,6 +107,7 @@ const App = () => {
                 }}
               />
             )}
+
             {!downloadPageLink && file && (
               <div className="m-auto">
                 <button
@@ -118,6 +133,7 @@ const App = () => {
               </div>
             )}
           </div>
+
           {downloadPageLink && (
             <div className="m-auto">
               <DownloadFile

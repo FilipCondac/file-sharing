@@ -9,6 +9,7 @@ import React from "react";
 const index: NextPage<{ file: IFile }> = ({
   file: { format, name, sizeInBytes, id },
 }: any) => {
+  //Axios request to download file from server and save it to client
   const handleDownload = async () => {
     const { data } = await axios.get(
       `http://localhost:8000/api/files/id/${id}/download`,
@@ -54,6 +55,7 @@ const index: NextPage<{ file: IFile }> = ({
 
 export default index;
 
+//Axios request to get file from server and pass it to page as props
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { id } = context.query;
   let file;
