@@ -36,6 +36,11 @@ const PhraseSearch: React.FC<Props> = (props: any) => {
     fileDownload(data, file.name);
   };
 
+  const resetComponent = () => {
+    setFile(null);
+    props.setComponentRender(true);
+  };
+
   return (
     <div
       className="flex flex-col p-5 m-auto mb-10 items-center shadow-[0_20px_60px_20px_rgba(135,206,235,0.1)] text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre hover:shadow-[0_20px_60px_20px_rgba(235,206,235,0.2)]
@@ -59,8 +64,24 @@ const PhraseSearch: React.FC<Props> = (props: any) => {
       )}
 
       {file && (
-        <div className="flex flex-col items-center w-full h-full p-5 py-10 text-white justify-centre">
+        <div className="flex flex-col items-center w-full h-full pb-5 text-white justify-centre">
           <div className="flex flex-col ">
+            <div onClick={resetComponent}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="float-right w-8 h-8 text-gray-400 cursor-pointer hover:text-gray-500"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </div>
             <h1 className="m-auto mb-5 font-bold">File Details</h1>
             <span className="m-6 mt-3 text-center ">Name: {file.name}</span>
             <div className="flex m-auto mt-0">
