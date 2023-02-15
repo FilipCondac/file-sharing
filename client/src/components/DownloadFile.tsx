@@ -17,11 +17,20 @@ const DownloadFile: React.FC = ({ downloadPageLink, phrase }): ReactElement => {
             ></img>
           </div>
         </div>
+
         <div className="flex flex-col m-auto mt-5">
           <span className="m-auto font-semibold"> Phrase: </span>
-          <span className="w-full m-auto uppercase hover:text-sky-400">
-            {phrase}
-          </span>
+          <div className="flex">
+            <span className="w-full m-auto uppercase hover:text-sky-400">
+              {phrase}
+            </span>
+
+            <img
+              src="/images/icons/copy-solid.svg"
+              className="object-contain w-8 h-8 mt-2 mb-3 ml-3 cursor-pointer "
+              onClick={() => navigator.clipboard.writeText(phrase)}
+            ></img>
+          </div>
         </div>
       </div>
     </div>

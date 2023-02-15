@@ -8,6 +8,7 @@ interface Props {}
 const PhraseSearch: React.FC<Props> = (props: any) => {
   const [searchTerm, setSearchTerm] = useState("");
   let [file, setFile] = useState(null);
+  const [fileNotFound, setFileNotFound] = useState(false);
 
   //   * The bellow above does the following:
   // 1. An async function is created and the event passed in as a parameter.
@@ -30,6 +31,7 @@ const PhraseSearch: React.FC<Props> = (props: any) => {
       setFile(file);
       props.setComponentRender(false);
     } catch (error: any) {
+      setFileNotFound(true);
       console.log(error);
     }
   };
@@ -57,7 +59,7 @@ const PhraseSearch: React.FC<Props> = (props: any) => {
   };
 
   return (
-    <div className="flex flex-col p-5 m-auto mb-10 items-center shadow-[0_20px_60px_20px_rgba(135,206,235,0.1)] text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre hover:shadow-[0_20px_60px_20px_rgba(235,206,235,0.2)]">
+    <div className="flex flex-col p-5 m-auto mb-10 items-center shadow-[0_20px_60px_20px_rgba(135,206,235,0.1)] text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre hover:shadow-[0_20px_60px_20px_rgba(235,206,235,0.2)] font-Raleway">
       {/* The code bellow does the following:
     1. It checks if the file variable is undefined or not. If it is undefined, then it shows a form to search for the file.
     2. If the file variable is defined, then it shows the file contents. */}
@@ -83,6 +85,11 @@ const PhraseSearch: React.FC<Props> = (props: any) => {
         2. The function resets the file state variable to null, which triggers the change in the conditional rendering.
         3. The file details are displayed to the user.
         4. The user can download the file. */}
+      {fileNotFound && (
+        <div className="mt-2">
+          <h1 className="text-red-500">File not found</h1>
+        </div>
+      )}
       {file && (
         <div className="flex flex-col items-center w-full h-full pb-5 text-white justify-centre">
           <div className="flex flex-col ">

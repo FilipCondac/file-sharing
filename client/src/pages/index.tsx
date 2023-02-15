@@ -59,10 +59,11 @@ const App = () => {
     setFile(null);
     setPhrase(null);
     setdownloadPageLink(null);
+    setUploadingStatus("Upload");
   };
 
   return (
-    <main className="flex flex-col h-full font-raleway dark [--scroll-mt:9.875rem] lg:[--scroll-mt:6.3125rem] dark:bg-slate-900 text-sky-400 ">
+    <main className="flex flex-col h-full font-raleway dark [--scroll-mt:9.875rem] lg:[--scroll-mt:6.3125rem] dark:bg-slate-900 text-sky-400 font-Raleway">
       <TopNav />
       {!file && (
         <div className="m-auto">

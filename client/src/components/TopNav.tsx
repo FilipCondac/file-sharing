@@ -3,13 +3,13 @@ import React from "react";
 
 const TopNav: React.FC = () => {
   return (
-    <div className="w-full h-16 p-0">
+    <div className="w-full h-16 p-0 text-gray-500">
       <div className="float-left">
-        <h2 className="w-64 h-48 m-4 text-4xl font-bold text-gray-600 ">
+        <h2 className="w-64 h-48 m-4 text-4xl font-bold ">
           <Link href={"/"}> SharePal </Link>
         </h2>
       </div>
-      <div className="float-right m-3 mt-1 text-lg font-bold">
+      <div className="float-right m-3 mt-1 text-lg font-bold text-gray-400">
         <button className="m-5">Login </button>
         <button className="m-5">Sign Up</button>
       </div>
