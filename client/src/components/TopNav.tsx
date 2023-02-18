@@ -11,7 +11,9 @@ const TopNav: React.FC = () => {
       </div>
       <div className="float-right m-3 mt-1 text-lg font-bold text-gray-400">
         <button className="m-5">Login </button>
-        <button className="m-5">Sign Up</button>
+        <Link href={"/register"}>
+          <button className="m-5">Sign Up</button>
+        </Link>
       </div>
     </div>
   );

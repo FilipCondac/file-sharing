@@ -3,6 +3,30 @@ import multer from "multer";
 import File from "../models/File";
 import { UploadApiResponse, v2 as cloudinary } from "cloudinary";
 import https from "https";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { initializeApp } from "firebase/app";
+import dotenv from "dotenv";
+
+// Load environment variables from .env file, where API keys and passwords are configured
+dotenv.config();
+
+const firebaseConfig = {
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID,
+  measurementId: process.env.FIREBASE_MEASUREMENT_ID,
+};
+
+// Initialize Firebase
+const fireApp = initializeApp(firebaseConfig);
+export const fireAuth = getAuth(fireApp);
 
 // Create Express router
 const router = express.Router();
@@ -127,6 +151,42 @@ router.get("/id/:id/download", async (req, res) => {
       .status(500)
       .json({ message: "Server Error while trying to download file" });
   }
+});
+
+router.post("/register", async (req, res) => {
+  const { email, password } = req.body;
+
+  const auth = getAuth();
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // Signed in
+      const user = userCredential.user;
+      console.log(user);
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+
+      console.log(errorMessage);
+      console.log(errorCode);
+    });
+});
+
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  const auth = getAuth();
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // Signed in
+      const user = userCredential.user;
+      console.log(user);
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorMessage);
+      console.log(errorCode);
+    });
 });
 
 export default router;
