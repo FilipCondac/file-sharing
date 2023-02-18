@@ -12,7 +12,17 @@ const register = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
-    console.log(response.json());
+
+    const data = await response.json();
+    const user = data.user;
+    const statusCode = data.status;
+
+    // Use the user ID as needed
+    if (statusCode === 200) {
+      console.log(user);
+    } else {
+      console.log(data.message);
+    }
   };
 
   return (

@@ -7,6 +7,8 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
 } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import dotenv from "dotenv";
@@ -161,14 +163,18 @@ router.post("/register", async (req, res) => {
     .then((userCredential) => {
       // Signed in
       const user = userCredential.user;
-      console.log(user);
+      res.status(200).json({
+        status: 200,
+        message: "User created successfully",
+        user: user,
+      });
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
-
       console.log(errorMessage);
       console.log(errorCode);
+      return res.status(404).json({ message: "User not created", status: 404 });
     });
 });
 
@@ -179,13 +185,55 @@ router.post("/login", async (req, res) => {
     .then((userCredential) => {
       // Signed in
       const user = userCredential.user;
-      console.log(user);
+      res.status(200).json({
+        status: 200,
+        message: "User logged in successfully",
+        user: user,
+      });
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
       console.log(errorMessage);
       console.log(errorCode);
+      return res.status(404).json({ message: "User not found", status: 404 });
+    });
+});
+
+router.get("/authorizedStatus", async (req, res) => {
+  const auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/firebase.User
+
+      res.status(200).json({
+        status: 200,
+        message: "User logged in successfully",
+        user: user,
+      });
+      // ...
+    } else {
+      // User is signed out
+      // ...
+      return res.status(404).json({ message: "User not found", status: 404 });
+    }
+  });
+});
+
+router.get("/logout", async (req, res) => {
+  const auth = getAuth();
+  signOut(auth)
+    .then(() => {
+      // Sign-out successful.
+      res.status(200).json({
+        status: 200,
+        message: "User logged out successfully",
+      });
+    })
+    .catch((error) => {
+      // An error happened.
+      return res.status(404).json({ message: "User not found", status: 404 });
     });
 });
 

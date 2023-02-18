@@ -6,6 +6,7 @@ import { useState } from "react";
 import axios from "axios";
 import DownloadFile from "@/components/DownloadFile";
 import React from "react";
+import authorizedStatus from "../../libs/authorizedStatus";
 
 const App = () => {
   //Call the useState hook to create a state variable called file
@@ -18,6 +19,8 @@ const App = () => {
   const [uploadingStatus, setUploadingStatus] = useState<
     "Uploading" | "Upload Failed" | "Uploaded" | "Upload"
   >("Upload");
+
+  const isAuthorized = authorizedStatus();
 
   /* The code bellow does the following:
 1. The handleUpload function is called when the user clicks the upload button.
@@ -64,7 +67,7 @@ const App = () => {
 
   return (
     <main className="flex flex-col h-full dark [--scroll-mt:9.875rem] lg:[--scroll-mt:6.3125rem] dark:bg-slate-900 text-sky-400 font-Raleway">
-      <TopNav />
+      <TopNav isAuthorized={isAuthorized} />
       {!file && (
         <div className="m-auto">
           <h1 className="m-auto mb-5 text-lg font-bold text-center text-gray-400">
