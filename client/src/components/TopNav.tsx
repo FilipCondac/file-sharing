@@ -3,9 +3,10 @@ import React from "react";
 import authorizedStatus from "libs/authorizedStatus";
 import logout from "libs/logout";
 
-const TopNav = () => {
+const TopNav = (props: any) => {
   const [user, setUser] = React.useState(null);
   const [dropdown, setDropdown] = React.useState(false);
+
   React.useEffect(() => {
     const fetchAuthorizedStatus = async () => {
       try {
@@ -33,6 +34,10 @@ const TopNav = () => {
     } else {
       setDropdown(true);
     }
+  };
+
+  const renderAccountOptions = () => {
+    props.setAccountOptions(true);
   };
 
   return (
@@ -79,7 +84,7 @@ const TopNav = () => {
               </svg>
             </div>
             {dropdown && (
-              <div className="flex flex-col p-4 mt-3 mr-2 font-light border rounded-lg bg-gradient-to-r from-slate-800 to-slate-900">
+              <div className="z-0 flex flex-col p-4 mt-3 mr-2 font-light border rounded-lg bg-gradient-to-r from-slate-800 to-slate-900">
                 <div className="flex p-3 bg-gray-800 border rounded-lg">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -98,14 +103,17 @@ const TopNav = () => {
                   <div className="flex flex-col p-3 ml-3">
                     <span className="">Username</span>
                     <span className="">{user.email}</span>
-                    <div className="flex px-2 mt-2 text-center border rounded-md">
+                    <div
+                      className="flex px-2 mt-2 text-center border rounded-md cursor-pointer"
+                      onClick={renderAccountOptions}
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
                         strokeWidth={1.5}
                         stroke="currentColor"
-                        className="w-6 h-6"
+                        className="w-6 h-auto"
                       >
                         <path
                           strokeLinecap="round"
