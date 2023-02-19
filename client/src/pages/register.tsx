@@ -24,12 +24,12 @@ const register = () => {
       </h1>
       <form
         onSubmit={onSubmit}
-        className="m-auto mt-5 shadow-[0_20px_60px_20px_rgba(135,206,235,0.1)] p-20 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre text-center hover:shadow-[0_20px_60px_20px_rgba(235,206,235,0.2)]"
+        className="m-auto mt-5 border p-20 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre text-center hover:shadow-[0_20px_60px_20px_rgba(235,206,235,0.2)]"
       >
         <div className="m-auto">
           <div>
             <input
-              className="p-1 mb-3 rounded-lg bg-slate-700"
+              className="p-1 mb-3 border rounded-lg bg-slate-700"
               value={email}
               placeholder="E-Mail"
               onChange={(e) => setEmail(e.target.value)}
@@ -37,7 +37,7 @@ const register = () => {
           </div>
           <div className="">
             <input
-              className="p-1 mb-3 rounded-md bg-slate-700"
+              className="p-1 mb-3 border rounded-md bg-slate-700"
               value={password}
               placeholder="Password"
               type="password"
