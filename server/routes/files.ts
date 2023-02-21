@@ -342,16 +342,22 @@ router.post("/resetPassword", async (req, res) => {
 router.post("/createGroup", async (req, res) => {
   const { groupName } = req.body;
   const wordPhrase = await randomWords({ exactly: 3, join: " " });
+  const dbPhrase = wordPhrase.replace(/\s/g, "");
   const auth = getAuth();
   const creator = auth.currentUser?.uid;
   try {
     const group = await Group.create({
       groupname: groupName,
-      phrase: wordPhrase,
+      phrase: dbPhrase,
+      members: [creator],
       creator: creator,
     });
     console.log(group);
-    return res.status(200).json({ message: "Group created successfully" });
+    return res.status(200).json({
+      phrase: wordPhrase,
+      message: "Group created successfully",
+      status: 200,
+    });
   } catch (error) {
     console.log(error);
     return res
@@ -366,12 +372,44 @@ router.get("/getGroups", async (req, res) => {
   try {
     const groups = await Group.find({ creator: user });
     console.log(groups);
-    return res.status(200).json({ groups: groups });
+    return res.status(200).json({ groups: groups, status: 200 });
   } catch (error) {
     console.log(error);
     return res
       .status(500)
       .json({ message: "Server Error while trying to get groups" });
+  }
+});
+
+router.post("/joinGroup", async (req, res) => {
+  const { phrase } = req.body;
+  const auth = getAuth();
+  const user = auth.currentUser?.uid;
+  try {
+    // Find the document with the given phrase and add the user ID to the "members" array
+    const group = await Group.findOneAndUpdate(
+      { phrase: phrase },
+      { $push: { members: user } },
+      { new: true }
+    );
+
+    if (!group) {
+      return res
+        .status(404)
+        .json({
+          message: "Group not found with the provided phrase",
+          status: 404,
+        });
+    }
+
+    return res
+      .status(200)
+      .json({ message: "User added to group successfully", status: 200 });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ message: "Server Error while trying to join group" });
   }
 });
 

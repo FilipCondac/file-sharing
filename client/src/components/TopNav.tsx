@@ -2,7 +2,6 @@ import Link from "next/link";
 import React from "react";
 import authorizedStatus from "libs/authorizedStatus";
 import logout from "libs/logout";
-import Group from "./groups";
 import axios from "axios";
 
 const TopNav = (props: any) => {
@@ -11,6 +10,11 @@ const TopNav = (props: any) => {
   const [groupsDropdown, setGroupsDropdown] = React.useState(false);
   const [createGroup, setCreateGroup] = React.useState(false);
   const [groupName, setGroupName] = React.useState("");
+  const [groupList, setGroupList] = React.useState([]);
+  const [joinGroup, setJoinGroup] = React.useState(false);
+  const [joinPhrase, setJoinPhrase] = React.useState("");
+  const [groupWordPhrase, setGroupWordPhrase] = React.useState("");
+  const [joinStatus, setJoinStatus] = React.useState("");
 
   React.useEffect(() => {
     const fetchAuthorizedStatus = async () => {
@@ -42,9 +46,10 @@ const TopNav = (props: any) => {
     }
   };
 
-  const renderGroups = () => {
+  const renderGroups = async () => {
     if (!groupsDropdown) {
       setGroupsDropdown(true);
+      await getGroups();
     } else {
       setGroupsDropdown(false);
     }
@@ -59,10 +64,24 @@ const TopNav = (props: any) => {
       setCreateGroup(false);
     } else {
       setCreateGroup(true);
+      if (joinGroup) {
+        setJoinGroup(false);
+      }
     }
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const renderJoinGroup = () => {
+    if (joinGroup) {
+      setJoinGroup(false);
+    } else {
+      setJoinGroup(true);
+      if (createGroup) {
+        setCreateGroup(false);
+      }
+    }
+  };
+
+  const handleSubmitCreate = async (event: React.FormEvent) => {
     event.preventDefault();
 
     const response = await fetch(
@@ -76,13 +95,62 @@ const TopNav = (props: any) => {
 
     const data = await response.json();
     const statusCode = data.status;
-
+    const groupWordPhrase = data.phrase;
     if (statusCode === 200) {
-      console.log(data.message);
+      console.log(groupWordPhrase);
+      setGroupWordPhrase(data.phrase);
     } else if (statusCode === 404) {
       console.log(data.message);
     } else {
       console.log(data.message);
+    }
+  };
+
+  const handleSubmitJoin = async (event: React.FormEvent) => {
+    event.preventDefault();
+    const phrase = joinPhrase.replace(/\s/g, "").toLowerCase();
+
+    try {
+      const response = await fetch(
+        "http://localhost:8000/api/files/joinGroup",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ phrase }),
+        }
+      );
+      const data = await response.json();
+      const statusCode = data.status;
+      if (statusCode === 200) {
+        console.log("Joined Group Successfully");
+        setJoinStatus("Joined Group Successfully");
+      } else if (statusCode === 404) {
+        console.log(data.message);
+        setJoinStatus("Group Not Found");
+      } else {
+        console.log(data.message);
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
+  const getGroups = async () => {
+    const response = await fetch("http://localhost:8000/api/files/getGroups", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const data = await response.json();
+    const statusCode = data.status;
+    const groups = data.groups;
+
+    if (statusCode === 200) {
+      setGroupList(groups);
+    } else if (statusCode === 404) {
+      console.log(data.status + data.message);
+    } else {
+      console.log(data.status + data.message);
     }
   };
 
@@ -107,29 +175,88 @@ const TopNav = (props: any) => {
                   </span>
                   {groupsDropdown && (
                     <div className="z-0 flex flex-col p-4 mt-3 mr-2 font-light border rounded-lg bg-gradient-to-r from-slate-800 to-slate-900 ">
-                      <div className="flex flex-col float-right p-1 ml-20 text-base bg-gray-800 border rounded-lg">
-                        <div className="flex" onClick={renderCreateGroup}>
-                          <span className="mx-2">Create Group</span>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-6 h-6"
+                      <div className="flex flex-col ">
+                        <div className="flex">
+                          <div
+                            className="flex float-left p-1 text-base bg-gray-800 border rounded-lg"
+                            onClick={renderCreateGroup}
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 002.25-2.25V6a2.25 2.25 0 00-2.25-2.25H6A2.25 2.25 0 003.75 6v2.25A2.25 2.25 0 006 10.5zm0 9.75h2.25A2.25 2.25 0 0010.5 18v-2.25a2.25 2.25 0 00-2.25-2.25H6a2.25 2.25 0 00-2.25 2.25V18A2.25 2.25 0 006 20.25zm9.75-9.75H18a2.25 2.25 0 002.25-2.25V6A2.25 2.25 0 0018 3.75h-2.25A2.25 2.25 0 0013.5 6v2.25a2.25 2.25 0 002.25 2.25z"
-                            />
-                          </svg>
+                            <span className="mx-2">Join Group</span>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="w-6 h-6"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"
+                              />
+                            </svg>
+                          </div>
+                          <div
+                            className="flex float-right p-1 ml-2 text-base bg-gray-800 border rounded-lg"
+                            onClick={renderJoinGroup}
+                          >
+                            <span className="mx-2">Create Group</span>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="w-6 h-6"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 002.25-2.25V6a2.25 2.25 0 00-2.25-2.25H6A2.25 2.25 0 003.75 6v2.25A2.25 2.25 0 006 10.5zm0 9.75h2.25A2.25 2.25 0 0010.5 18v-2.25a2.25 2.25 0 00-2.25-2.25H6a2.25 2.25 0 00-2.25 2.25V18A2.25 2.25 0 006 20.25zm9.75-9.75H18a2.25 2.25 0 002.25-2.25V6A2.25 2.25 0 0018 3.75h-2.25A2.25 2.25 0 0013.5 6v2.25a2.25 2.25 0 002.25 2.25z"
+                              />
+                            </svg>
+                          </div>
                         </div>
-                        {createGroup && (
+                        {createGroup && !joinGroup && (
                           <div className="flex flex-col mx-2">
+                            <h2 className="m-auto mt-2 font-bold">Join</h2>
                             <form
                               className="flex flex-col"
-                              onSubmit={handleSubmit}
+                              onSubmit={handleSubmitJoin}
+                            >
+                              <span className="mb-2 ">
+                                Enter three word phrase:
+                              </span>
+                              <input
+                                className="mb-2 rounded-lg bg-slate-700"
+                                onChange={(event) =>
+                                  setJoinPhrase(event.target.value)
+                                }
+                              />
+                            </form>
+                            {(joinStatus == "Joined Group Successfully" && (
+                              <div className="m-auto">
+                                <span className="text-green-500">
+                                  {joinStatus}
+                                </span>
+                              </div>
+                            )) ||
+                              (joinStatus == "Group Not Found" && (
+                                <div className="m-auto">
+                                  <span className="text-red-500">
+                                    {joinStatus}
+                                  </span>
+                                </div>
+                              ))}
+                          </div>
+                        )}
+                        {!createGroup && joinGroup && (
+                          <div className="flex flex-col mx-2">
+                            <h2 className="m-auto mt-2 font-bold">Create</h2>
+                            <form
+                              className="flex flex-col"
+                              onSubmit={handleSubmitCreate}
                             >
                               <span className="mt-2 mb-2">Group Name:</span>
                               <input
@@ -138,29 +265,65 @@ const TopNav = (props: any) => {
                                   setGroupName(event.target.value)
                                 }
                               />
+                              {groupWordPhrase !== "" && (
+                                <div className="flex flex-col m-auto">
+                                  <span className="mt-3">
+                                    Your three word phrase:{" "}
+                                  </span>
+                                  <span className="text-sky-400">
+                                    {groupWordPhrase.toUpperCase()}
+                                  </span>
+                                </div>
+                              )}
                             </form>
                           </div>
                         )}
                       </div>
-
-                      <div className="flex p-3 mt-5 bg-gray-800 border rounded-lg">
-                        <span className="mr-3">Group Name: CSY3</span>
-                        <span></span>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="w-6 h-6 my-auto ml-auto"
+                      <h2 className="m-auto mt-3">Groups</h2>
+                      {groupList.map((group, i) => (
+                        <div
+                          className="flex p-3 mt-2 bg-gray-800 border rounded-lg"
+                          key={i}
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
-                          />
-                        </svg>
-                      </div>
+                          <span className="mr-3">{group.groupname}</span>
+                          <div className="flex ml-auto">
+                            <div className="flex mr-3">
+                              <span className="mr-1">
+                                {group.members.length}
+                              </span>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="currentColor"
+                                className="w-6 h-6"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"
+                                />
+                              </svg>
+                            </div>
+                            <span></span>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="w-6 h-6 my-auto ml-auto"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+                              />
+                            </svg>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   )}
                 </div>
