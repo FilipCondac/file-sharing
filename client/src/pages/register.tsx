@@ -12,7 +12,26 @@ const register = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
+
     console.log(response.json());
+
+    const responseLogin = await fetch("http://localhost:8000/api/files/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await responseLogin.json();
+    const user = data.user;
+    const statusCode = data.status;
+
+    // Use the user ID as needed
+    if (statusCode === 200) {
+      window.location.href = "/";
+      console.log(user);
+    } else {
+      console.log(data.message);
+    }
   };
 
   return (

@@ -1,6 +1,7 @@
 import express from "express";
 import multer from "multer";
 import File from "../models/File";
+import Group from "../models/Group";
 import { UploadApiResponse, v2 as cloudinary } from "cloudinary";
 import https from "https";
 import {
@@ -9,6 +10,13 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
+  updateProfile,
+  updateEmail,
+  updatePassword,
+  // GoogleAuthProvider,
+  deleteUser,
+  sendPasswordResetEmail,
+  // signInWithPopup,
 } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import dotenv from "dotenv";
@@ -28,6 +36,8 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const fireApp = initializeApp(firebaseConfig);
+// const provider = new GoogleAuthProvider();
+// provider.addScope("https://www.googleapis.com/auth/contacts.readonly");
 export const fireAuth = getAuth(fireApp);
 
 // Create Express router
@@ -235,6 +245,134 @@ router.get("/logout", async (req, res) => {
       // An error happened.
       return res.status(404).json({ message: "User not found", status: 404 });
     });
+});
+
+router.post("/updateAccount", async (req, res) => {
+  const { displayName, email, password } = req.body;
+  const auth = getAuth();
+  if (auth.currentUser) {
+    if (displayName !== "") {
+      updateProfile(auth.currentUser, {
+        displayName: displayName,
+      })
+        .then(() => {
+          res.status(200).json({
+            status: 200,
+            message: "User display updated successfully",
+          });
+        })
+        .catch((error) => {
+          // An error occurred
+          // ...
+        });
+    }
+
+    if (email !== "") {
+      updateEmail(auth.currentUser, email)
+        .then(() => {
+          res.status(200).json({
+            status: 200,
+            message: "User emailupdated successfully",
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    if (password !== "") {
+      updatePassword(auth.currentUser, password)
+        .then(() => {
+          res.status(200).json({
+            status: 200,
+            message: "User password updated successfully",
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  } else {
+    return res.status(404).json({ message: "User not found", status: 404 });
+  }
+});
+
+router.post("/deleteAccount", async (req, res) => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (user) {
+    deleteUser(user)
+      .then(() => {
+        // User deleted.
+        res.status(200).json({
+          status: 200,
+          message: "User deleted successfully",
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        return res.status(404).json({ message: "User not found", status: 404 });
+      });
+  } else {
+    return res.status(404).json({ message: "User not found", status: 404 });
+  }
+});
+
+router.post("/resetPassword", async (req, res) => {
+  const { email } = req.body;
+  const auth = getAuth();
+  sendPasswordResetEmail(auth, email)
+    .then(() => {
+      console.log("Password reset email sent successfully");
+      res.status(200).json({
+        status: 200,
+        message: "Password reset email sent successfully",
+      });
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorMessage);
+      console.log(errorCode);
+      return res.status(404).json({ message: "User not found", status: 404 });
+    });
+});
+
+router.post("/createGroup", async (req, res) => {
+  const { groupName } = req.body;
+  const wordPhrase = await randomWords({ exactly: 3, join: " " });
+  const auth = getAuth();
+  const creator = auth.currentUser?.uid;
+  try {
+    const group = await Group.create({
+      groupname: groupName,
+      phrase: wordPhrase,
+      creator: creator,
+    });
+    console.log(group);
+    return res.status(200).json({ message: "Group created successfully" });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ message: "Server Error while trying to create group" });
+  }
+});
+
+router.get("/getGroups", async (req, res) => {
+  const auth = getAuth();
+  const user = auth.currentUser?.uid;
+  try {
+    const groups = await Group.find({ creator: user });
+    console.log(groups);
+    return res.status(200).json({ groups: groups });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ message: "Server Error while trying to get groups" });
+  }
 });
 
 export default router;

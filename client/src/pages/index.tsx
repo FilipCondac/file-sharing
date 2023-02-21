@@ -8,6 +8,7 @@ import DownloadFile from "@/components/DownloadFile";
 import React from "react";
 import authorizedStatus from "../../libs/authorizedStatus";
 import AccountOptions from "@/components/AccountOptions";
+
 const App = () => {
   //Call the useState hook to create a state variable called file
   //and a function called setFile to update the state variable

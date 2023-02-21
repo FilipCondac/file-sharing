@@ -4,6 +4,7 @@ import TopNav from "@/components/TopNav";
 const register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [accountError, setAccountError] = useState("");
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -21,6 +22,50 @@ const register = () => {
     if (statusCode === 200) {
       window.location.href = "/";
       console.log(user);
+    } else if (statusCode === 404) {
+      setAccountError("Invalid credentials");
+    } else {
+      console.log(data.message);
+    }
+  };
+
+  // const signInWithGoogle = async () => {
+  //   const response = await fetch(
+  //     "http://localhost:8000/api/files/signInWithGoogle",
+  //     {
+  //       method: "GET",
+  //       headers: { "Content-Type": "application/json" },
+  //     }
+  //   );
+  //   console.log(response);
+  //   // const data = await response.json();
+  //   // const user = data.user;
+  //   // const statusCode = data.status;
+  // };
+  const [emailForm, setEmailForm] = useState(false);
+
+  const loadEmailForm = () => {
+    setEmailForm(true);
+  };
+
+  const resetPassword = async () => {
+    const response = await fetch(
+      "http://localhost:8000/api/files/resetPassword",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      }
+    );
+
+    const data = await response.json();
+    const statusCode = data.status;
+
+    if (statusCode === 200) {
+      window.location.href = "/";
+      console.log(data.message);
+    } else if (statusCode === 404) {
+      setAccountError("Invalid credentials");
     } else {
       console.log(data.message);
     }
@@ -37,7 +82,10 @@ const register = () => {
         onSubmit={onSubmit}
         className="m-auto mt-5 border p-20 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre text-center hover:shadow-[0_20px_60px_20px_rgba(235,206,235,0.1)]"
       >
-        <div className="m-auto">
+        <div className="m-auto ">
+          {accountError !== "" && (
+            <div className="text-red-400 ">{accountError}</div>
+          )}
           <div>
             <input
               className="p-1 mb-3 border rounded-lg bg-slate-700"
@@ -46,37 +94,70 @@ const register = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <div className="">
-            <input
-              className="p-1 mb-3 border rounded-md bg-slate-700"
-              value={password}
-              placeholder="Password"
-              type="password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <div className="m-auto mt-5 text-center">
-            <button
-              className="inline-flex items-center px-4 py-2 font-bold text-gray-800 bg-gray-300 rounded hover:bg-gray-400"
-              onClick={onSubmit}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6 mr-2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          {!emailForm ? (
+            <div>
+              <div className="">
+                <input
+                  className="p-1 mb-3 border rounded-md bg-slate-700"
+                  value={password}
+                  placeholder="Password"
+                  type="password"
+                  onChange={(e) => setPassword(e.target.value)}
                 />
-              </svg>
-              <span>Login</span>
-            </button>
-          </div>
+              </div>
+
+              <div className="m-auto mt-5 text-center">
+                <button
+                  className="inline-flex items-center px-4 py-2 font-bold text-gray-800 bg-gray-300 rounded hover:bg-gray-400"
+                  onClick={onSubmit}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-6 h-6 mr-2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <span>Login</span>
+                </button>
+              </div>
+              <div className="mt-5">
+                <span className="mt-6 cursor-pointer" onClick={loadEmailForm}>
+                  Forgot Password
+                </span>
+              </div>
+            </div>
+          ) : (
+            <div className="m-auto mt-5 text-center">
+              <button
+                className="inline-flex items-center px-4 py-2 font-bold text-gray-800 bg-gray-300 rounded hover:bg-gray-400"
+                onClick={resetPassword}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6 mr-2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span>Send Email</span>
+              </button>
+            </div>
+          )}
         </div>
       </form>
     </div>

@@ -1,5 +1,6 @@
 import React from "react";
 import authorizedStatus from "libs/authorizedStatus";
+import axios from "axios";
 
 const AccountOptions = () => {
   const [user, setUser] = React.useState(null);
@@ -16,9 +17,57 @@ const AccountOptions = () => {
     fetchAuthorizedStatus();
   }, []);
 
+  //   const deleteAccount = async () => {
+  //     try {
+
+  const [displayName, setDisplayName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [accountError, setAccountError] = React.useState("");
+  const updateAccount = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8000/api/files/updateAccount",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ displayName, email, password }),
+        }
+      );
+      if (response.status === 200) {
+        window.location.href = "/";
+      }
+      {
+        setAccountError("Invalid credentials");
+      }
+      console.log(response.json());
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const deleteAccount = async () => {
     try {
-        
+      const confirmed = window.confirm(
+        "ARE YOU SURE YOU WANT TO DELETE ACCOUNT? THIS CANNOT BE UNDONE."
+      );
+      if (confirmed) {
+        const response = await fetch(
+          "http://localhost:8000/api/files/deleteAccount",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ password }),
+          }
+        );
+        if (response.status === 200) {
+          window.location.href = "/";
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="flex flex-col p-5 mx-5 w-max border text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 hover:shadow-[0_20px_60px_20px_rgba(235,206,235,0.025)] font-Raleway">
@@ -30,7 +79,8 @@ const AccountOptions = () => {
             <input
               type="text"
               className="p-1 px-2 rounded-lg bg-slate-700"
-              placeholder={user?.email}
+              placeholder={user?.displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
             ></input>
           </div>
           <div className="flex flex-col mb-5">
@@ -39,6 +89,7 @@ const AccountOptions = () => {
               type="text"
               className="p-1 px-2 rounded-lg bg-slate-700"
               placeholder={user?.email}
+              onChange={(e) => setEmail(e.target.value)}
             ></input>
           </div>
           <div className="flex flex-col mb-5">
@@ -47,9 +98,13 @@ const AccountOptions = () => {
               type="password"
               className="p-1 px-2 rounded-lg bg-slate-700"
               placeholder="****************"
+              onChange={(e) => setPassword(e.target.value)}
             ></input>
           </div>
-          <div className="flex justify-center mt-2 text-center border rounded-md cursor-pointer">
+          <div
+            className="flex justify-center mt-2 text-center border rounded-md cursor-pointer"
+            onClick={updateAccount}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -66,7 +121,15 @@ const AccountOptions = () => {
             </svg>
             <span className="">Update</span>
           </div>
-          <div className="flex justify-center p-1 mt-10 text-center bg-red-600 border rounded-md cursor-pointer" onClick={deleteAccount}>
+          {accountError !== "" && (
+            <div className="flex justify-center mt-2 text-center text-red-600 border rounded-md cursor-pointer">
+              <span className="">{accountError}</span>
+            </div>
+          )}
+          <div
+            className="flex justify-center p-1 mt-10 text-center bg-red-600 border rounded-md cursor-pointer"
+            onClick={deleteAccount}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
