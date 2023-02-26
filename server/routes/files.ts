@@ -370,7 +370,7 @@ router.get("/getGroups", async (req, res) => {
   const auth = getAuth();
   const user = auth.currentUser?.uid;
   try {
-    const groups = await Group.find({ creator: user });
+    const groups = await Group.find({ members: user });
     console.log(groups);
     return res.status(200).json({ groups: groups, status: 200 });
   } catch (error) {
@@ -394,12 +394,10 @@ router.post("/joinGroup", async (req, res) => {
     );
 
     if (!group) {
-      return res
-        .status(404)
-        .json({
-          message: "Group not found with the provided phrase",
-          status: 404,
-        });
+      return res.status(404).json({
+        message: "Group not found with the provided phrase",
+        status: 404,
+      });
     }
 
     return res

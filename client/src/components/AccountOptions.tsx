@@ -36,10 +36,10 @@ const AccountOptions = () => {
       );
       if (response.status === 200) {
         window.location.href = "/";
-      }
-      {
+      } else {
         setAccountError("Invalid credentials");
       }
+
       console.log(response.json());
     } catch (error) {
       console.error(error);
