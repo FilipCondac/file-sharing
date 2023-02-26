@@ -2,20 +2,27 @@ import Link from "next/link";
 import React from "react";
 import authorizedStatus from "libs/authorizedStatus";
 import logout from "libs/logout";
-import axios from "axios";
 
 const TopNav = (props: any) => {
+  //Dropdown menu
   const [user, setUser] = React.useState(null);
   const [dropdown, setDropdown] = React.useState(false);
+
+  //Groups create
   const [groupsDropdown, setGroupsDropdown] = React.useState(false);
   const [createGroup, setCreateGroup] = React.useState(false);
   const [groupName, setGroupName] = React.useState("");
+
+  //Group list
   const [groupList, setGroupList] = React.useState([]);
+
+  //Join Group
   const [joinGroup, setJoinGroup] = React.useState(false);
   const [joinPhrase, setJoinPhrase] = React.useState("");
   const [groupWordPhrase, setGroupWordPhrase] = React.useState("");
   const [joinStatus, setJoinStatus] = React.useState("");
 
+  //Get User Status
   React.useEffect(() => {
     const fetchAuthorizedStatus = async () => {
       try {
@@ -28,6 +35,7 @@ const TopNav = (props: any) => {
     fetchAuthorizedStatus();
   }, []);
 
+  //Logout
   const logoutAccount = async () => {
     try {
       await logout();
@@ -38,27 +46,37 @@ const TopNav = (props: any) => {
     }
   };
 
+  //Render Dropdown Menu for groups
   const renderDropdown = () => {
     if (dropdown) {
       setDropdown(false);
     } else {
       setDropdown(true);
+      if (groupsDropdown) {
+        setGroupsDropdown(false);
+      }
     }
   };
 
+  //Render already joined groups
   const renderGroups = async () => {
     if (!groupsDropdown) {
       setGroupsDropdown(true);
       await getGroups();
+      if (dropdown) {
+        setDropdown(false);
+      }
     } else {
       setGroupsDropdown(false);
     }
   };
 
+  //Render Account Options Form
   const renderAccountOptions = () => {
     props.setAccountOptions(true);
   };
 
+  //Render Create Group Form
   const renderCreateGroup = () => {
     if (createGroup) {
       setCreateGroup(false);
@@ -70,6 +88,7 @@ const TopNav = (props: any) => {
     }
   };
 
+  //Render Join Group Form
   const renderJoinGroup = () => {
     if (joinGroup) {
       setJoinGroup(false);
@@ -81,6 +100,7 @@ const TopNav = (props: any) => {
     }
   };
 
+  //Create Group
   const handleSubmitCreate = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -92,12 +112,10 @@ const TopNav = (props: any) => {
         body: JSON.stringify({ groupName }),
       }
     );
-
     const data = await response.json();
     const statusCode = data.status;
-    const groupWordPhrase = data.phrase;
+
     if (statusCode === 200) {
-      console.log(groupWordPhrase);
       setGroupWordPhrase(data.phrase);
     } else if (statusCode === 404) {
       console.log(data.message);
@@ -106,6 +124,7 @@ const TopNav = (props: any) => {
     }
   };
 
+  //Join Group
   const handleSubmitJoin = async (event: React.FormEvent) => {
     event.preventDefault();
     const phrase = joinPhrase.replace(/\s/g, "").toLowerCase();
@@ -122,7 +141,6 @@ const TopNav = (props: any) => {
       const data = await response.json();
       const statusCode = data.status;
       if (statusCode === 200) {
-        console.log("Joined Group Successfully");
         setJoinStatus("Joined Group Successfully");
       } else if (statusCode === 404) {
         console.log(data.message);
@@ -135,6 +153,7 @@ const TopNav = (props: any) => {
     }
   };
 
+  //Display groups
   const getGroups = async () => {
     const response = await fetch("http://localhost:8000/api/files/getGroups", {
       method: "GET",
@@ -162,21 +181,24 @@ const TopNav = (props: any) => {
         </h2>
       </div>
       <div className="flex float-right m-3 mt-1 text-lg font-light text-gray-400">
+        {/* Check for user before rendering */}
         {user ? (
           <div className="flex flex-col float-right ">
-            <div className="flex m-auto">
+            <div className="flex ml-auto">
               <span className="flex mt-4 mr-5">
                 <div className="flex flex-col">
                   <span
-                    className="m-auto cursor-pointer"
+                    className="float-right ml-auto cursor-pointer"
                     onClick={renderGroups}
                   >
                     My Groups
                   </span>
+                  {/* My group dropdown menu */}
                   {groupsDropdown && (
                     <div className="z-0 flex flex-col p-4 mt-3 mr-2 font-light border rounded-lg bg-gradient-to-r from-slate-800 to-slate-900 ">
                       <div className="flex flex-col ">
                         <div className="flex">
+                          {/* Join group button */}
                           <div
                             className="flex float-left p-1 text-base bg-gray-800 border rounded-lg"
                             onClick={renderCreateGroup}
@@ -197,6 +219,7 @@ const TopNav = (props: any) => {
                               />
                             </svg>
                           </div>
+                          {/* Create group button */}
                           <div
                             className="flex float-right p-1 ml-2 text-base bg-gray-800 border rounded-lg"
                             onClick={renderJoinGroup}
@@ -218,9 +241,12 @@ const TopNav = (props: any) => {
                             </svg>
                           </div>
                         </div>
+                        {/* Render and un-render the other join/create button */}
                         {createGroup && !joinGroup && (
                           <div className="flex flex-col mx-2">
-                            <h2 className="m-auto mt-2 font-bold">Join</h2>
+                            <h2 className="m-auto mt-2 font-bold">
+                              Join Group
+                            </h2>
                             <form
                               className="flex flex-col"
                               onSubmit={handleSubmitJoin}
@@ -253,7 +279,9 @@ const TopNav = (props: any) => {
                         )}
                         {!createGroup && joinGroup && (
                           <div className="flex flex-col mx-2">
-                            <h2 className="m-auto mt-2 font-bold">Create</h2>
+                            <h2 className="m-auto mt-2 font-bold">
+                              Create Group
+                            </h2>
                             <form
                               className="flex flex-col"
                               onSubmit={handleSubmitCreate}
@@ -279,6 +307,7 @@ const TopNav = (props: any) => {
                           </div>
                         )}
                       </div>
+                      {/* List groups user is part of */}
                       <h2 className="m-auto mt-3">Groups</h2>
                       {groupList.map((group, i) => (
                         <div
@@ -328,6 +357,7 @@ const TopNav = (props: any) => {
                   )}
                 </div>
               </span>
+              {/* Dropdown menu for account */}
               <div
                 className="flex w-16 h-8 p-0 mt-3 ml-auto cursor-pointer"
                 onClick={renderDropdown}
@@ -382,6 +412,7 @@ const TopNav = (props: any) => {
                   <div className="flex flex-col p-3 ml-3">
                     <span className="">{user.displayName}</span>
                     <span className="">{user.email}</span>
+                    {/* Render account options for user */}
                     <div
                       className="flex px-2 mt-2 text-center border rounded-md cursor-pointer"
                       onClick={renderAccountOptions}
@@ -420,6 +451,7 @@ const TopNav = (props: any) => {
             )}
           </div>
         ) : (
+          // If user isnt logged in
           <>
             <Link href={"/login"}>
               <button className="m-5">Login </button>
