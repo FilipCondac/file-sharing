@@ -2,6 +2,7 @@ import Link from "next/link";
 import React from "react";
 import authorizedStatus from "libs/authorizedStatus";
 import logout from "libs/logout";
+import { useRouter } from "next/router";
 
 const TopNav = (props: any) => {
   //Dropdown menu
@@ -155,10 +156,13 @@ const TopNav = (props: any) => {
 
   //Display groups
   const getGroups = async () => {
-    const response = await fetch("http://localhost:8000/api/files/getGroups", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await fetch(
+      "http://localhost:8000/api/files/getUserGroups",
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
 
     const data = await response.json();
     const statusCode = data.status;
@@ -173,11 +177,32 @@ const TopNav = (props: any) => {
     }
   };
 
+  const handleRedirect = () => {
+    if (window.location.href === "/") {
+      window.location.reload();
+    } else {
+      window.location.href = "/";
+    }
+  };
+
+  // ...
+  const router = useRouter();
+  const handleGroupRedirect = (group: any) => {
+    router.push({
+      pathname: "/group",
+      query: {
+        groupID: group._id,
+      },
+    });
+  };
+
   return (
     <div className="w-full h-16 p-0 text-gray-500">
       <div className="float-left">
         <h2 className="w-64 h-48 m-4 text-4xl font-bold ">
-          <Link href={"/"}> SharePal </Link>
+          <span onClick={handleRedirect} className="cursor-pointer">
+            SharePal
+          </span>
         </h2>
       </div>
       <div className="flex float-right m-3 mt-1 text-lg font-light text-gray-400">
@@ -193,6 +218,7 @@ const TopNav = (props: any) => {
                   >
                     My Groups
                   </span>
+
                   {/* My group dropdown menu */}
                   {groupsDropdown && (
                     <div className="z-0 flex flex-col p-4 mt-3 mr-2 font-light border rounded-lg bg-gradient-to-r from-slate-800 to-slate-900 ">
@@ -200,7 +226,7 @@ const TopNav = (props: any) => {
                         <div className="flex">
                           {/* Join group button */}
                           <div
-                            className="flex float-left p-1 text-base bg-gray-800 border rounded-lg"
+                            className="flex float-left p-1 text-base bg-gray-800 border rounded-lg cursor-pointer"
                             onClick={renderCreateGroup}
                           >
                             <span className="mx-2">Join Group</span>
@@ -221,7 +247,7 @@ const TopNav = (props: any) => {
                           </div>
                           {/* Create group button */}
                           <div
-                            className="flex float-right p-1 ml-2 text-base bg-gray-800 border rounded-lg"
+                            className="flex float-right p-1 ml-2 text-base bg-gray-800 border rounded-lg cursor-pointer"
                             onClick={renderJoinGroup}
                           >
                             <span className="mx-2">Create Group</span>
@@ -313,6 +339,7 @@ const TopNav = (props: any) => {
                         <div
                           className="flex p-3 mt-2 bg-gray-800 border rounded-lg"
                           key={i}
+                          onClick={() => handleGroupRedirect(group)}
                         >
                           <span className="mr-3">{group.groupname}</span>
                           <div className="flex ml-auto">

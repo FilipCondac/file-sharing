@@ -98,6 +98,69 @@ router.post("/upload", upload.single("myFile"), async (req, res) => {
   }
 });
 
+router.post("/groupUpload", upload.single("myFile"), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+
+    let uploadedFile: UploadApiResponse;
+    // Upload file to Cloudinary
+    try {
+      uploadedFile = await cloudinary.uploader.upload(req.file.path, {
+        folder: "file-sharing",
+        resource_type: "auto",
+      });
+      // Save file details to MongoDB
+      const { originalname } = req.file;
+      const { secure_url, bytes, format } = uploadedFile;
+      const { groupID } = req.body;
+
+      //Generate random phrase and pass to db with removed spaces
+      const wordPhrase = await randomWords({ exactly: 3, join: " " });
+      const dbPhrase = wordPhrase.replace(/\s/g, "");
+
+      // Create new file document in MongoDB
+      const file = await File.create({
+        filename: originalname,
+        sizeInBytes: bytes,
+        phrase: dbPhrase,
+        secure_url,
+        format,
+        group: groupID,
+      });
+
+      // Send response to client with file details and download link
+      res.status(200).json({
+        id: file._id,
+        phrase: wordPhrase,
+        downloadPageLink: `${process.env.API_BASE_ENDPOINT_CLIENT}/download/id/${file._id}`,
+      });
+    } catch (error: any) {
+      console.error(error);
+      res.status(500).json({ message: "Cloudinary Error" });
+    }
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+router.get("/getFilesByGroup/:groupID", async (req, res) => {
+  try {
+    const groupID = req.params.groupID;
+    const file = await File.find({ group: groupID });
+    if (!file) {
+      return res.status(404).json({ message: "File does not exist" });
+    }
+
+    return res.status(200).json({
+      files: file,
+    });
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
 // @route GET /api/files/phrase/:phrase - This route is used to get file details by phrase
 //The phrase is passed in the URL and the file details are returned
 router.get("/phrase/:phrase", async (req, res) => {
@@ -366,7 +429,7 @@ router.post("/createGroup", async (req, res) => {
   }
 });
 
-router.get("/getGroups", async (req, res) => {
+router.get("/getUserGroups", async (req, res) => {
   const auth = getAuth();
   const user = auth.currentUser?.uid;
   try {
@@ -408,6 +471,28 @@ router.post("/joinGroup", async (req, res) => {
     return res
       .status(500)
       .json({ message: "Server Error while trying to join group" });
+  }
+});
+
+router.get("/group/:groupID", async (req, res) => {
+  try {
+    const id = req.params.groupID;
+    const group = await Group.findById(id);
+    if (!group) {
+      return res.status(404).json({ message: "Group does not exist" });
+    }
+
+    const { groupname, phrase, members, files } = group;
+    return res.status(200).json({
+      name: groupname,
+      phrase: phrase,
+      members: members,
+      files: files,
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Server Error finding group by ID" });
   }
 });
 

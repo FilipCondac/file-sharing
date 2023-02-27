@@ -28,6 +28,9 @@ const fileSchema = new Schema(
     sender: {
       type: String,
     },
+    group: {
+      type: String,
+    },
     receiver: {
       type: String,
     },
@@ -43,6 +46,7 @@ interface IFile extends Document {
   phrase: String;
   sizeInBytes: String;
   sender?: String;
+  group?: String;
   receiver?: String;
 }
 

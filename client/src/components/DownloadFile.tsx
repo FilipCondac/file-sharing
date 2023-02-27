@@ -1,13 +1,21 @@
 import React, { ReactElement } from "react";
 
 const DownloadFile: React.FC = ({ downloadPageLink, phrase }): ReactElement => {
+  
+  const handleLinkClick = () => {
+    window.location.href = downloadPageLink;
+  };
+
   return (
     <div className="p-1 text-white">
       <div className="flex flex-col">
         <div className="flex flex-col m-auto">
-          <span className="m-auto font-semibold "> Download Link: </span>
+          <span className="m-auto font-semibold"> Download Link: </span>
           <div className="flex">
-            <span className="m-auto text-center break-all hover:text-sky-400">
+            <span
+              className="m-auto text-center break-all cursor-pointer hover:text-sky-400"
+              onClick={handleLinkClick}
+            >
               {downloadPageLink}
             </span>
             <svg

@@ -73,6 +73,7 @@ const App = () => {
         isAuthorized={isAuthorized}
         setAccountOptions={setAccountOptions}
       />
+      {/* {handleRenderGroup() && <div>{group}</div>} */}
       {!accountOptions ? (
         <div className="flex flex-col m-auto">
           {!file && (
