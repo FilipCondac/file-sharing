@@ -26,21 +26,19 @@ const AccountOptions = () => {
   const [accountError, setAccountError] = React.useState("");
   const updateAccount = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:8000/api/files/updateAccount",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ displayName, email, password }),
-        }
+      const { status } = await axios.post(
+        "api/files/updateAccount",
+        { displayName, email, password },
+        { headers: { "Content-Type": "application/json" } }
       );
-      if (response.status === 200) {
+
+      if (status === 200) {
         window.location.href = "/";
       } else {
         setAccountError("Invalid credentials");
       }
 
-      console.log(response.json());
+      console.log(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -52,15 +50,13 @@ const AccountOptions = () => {
         "ARE YOU SURE YOU WANT TO DELETE ACCOUNT? THIS CANNOT BE UNDONE."
       );
       if (confirmed) {
-        const response = await fetch(
-          "http://localhost:8000/api/files/deleteAccount",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ password }),
-          }
+        const { status } = await axios.post(
+          "api/files/deleteAccount",
+          { password },
+          { headers: { "Content-Type": "application/json" } }
         );
-        if (response.status === 200) {
+
+        if (status === 200) {
           window.location.href = "/";
         }
       }

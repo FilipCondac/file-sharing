@@ -24,9 +24,7 @@ const PhraseSearch: React.FC<Props> = (props: any) => {
     event.preventDefault();
     const phrase = searchTerm.replace(/\s/g, "").toLowerCase();
     try {
-      const { data } = await axios.get(
-        `http://localhost:8000/api/files/phrase/${phrase}`
-      );
+      const { data } = await axios.get(`api/files/phrase/${phrase}`);
       file = data;
       setFile(file);
       props.setComponentRender(false);
@@ -42,12 +40,9 @@ const PhraseSearch: React.FC<Props> = (props: any) => {
 3. After the download is complete, it resets the component */
 
   const handleDownload = async () => {
-    const { data } = await axios.get(
-      `http://localhost:8000/api/files/id/${file.id}/download`,
-      {
-        responseType: "blob",
-      }
-    );
+    const { data } = await axios.get(`api/files/id/${file.id}/download`, {
+      responseType: "blob",
+    });
     fileDownload(data, file.name);
   };
 

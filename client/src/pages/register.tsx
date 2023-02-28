@@ -1,5 +1,6 @@
 import React, { FormEvent, useState } from "react";
 import TopNav from "@/components/TopNav";
+import axios from "axios";
 
 const register = () => {
   const [email, setEmail] = useState("");
@@ -7,30 +8,32 @@ const register = () => {
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:8000/api/files/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
 
-    console.log(response.json());
+    try {
+      // Register the user
+      await axios.post(
+        "api/files/register",
+        { email, password },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
-    const responseLogin = await fetch("http://localhost:8000/api/files/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+      // Login the user
+      const { data, status } = await axios.post(
+        "/api/files/login",
+        { email, password },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
-    const data = await responseLogin.json();
-    const user = data.user;
-    const statusCode = data.status;
+      const user = data.user;
 
-    // Use the user ID as needed
-    if (statusCode === 200) {
-      window.location.href = "/";
-      console.log(user);
-    } else {
-      console.log(data.message);
+      if (status === 200) {
+        window.location.href = "/";
+        console.log(user);
+      } else {
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

@@ -3,6 +3,7 @@ import React from "react";
 import authorizedStatus from "libs/authorizedStatus";
 import logout from "libs/logout";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 const TopNav = (props: any) => {
   //Dropdown menu
@@ -105,23 +106,22 @@ const TopNav = (props: any) => {
   const handleSubmitCreate = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const response = await fetch(
-      "http://localhost:8000/api/files/createGroup",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ groupName }),
-      }
-    );
-    const data = await response.json();
-    const statusCode = data.status;
+    try {
+      const { data, status } = await axios.post(
+        "api/files/createGroup",
+        { groupName },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
-    if (statusCode === 200) {
-      setGroupWordPhrase(data.phrase);
-    } else if (statusCode === 404) {
-      console.log(data.message);
-    } else {
-      console.log(data.message);
+      if (status === 200) {
+        setGroupWordPhrase(data.phrase);
+      } else if (status === 404) {
+        console.log(data.message);
+      } else {
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -131,49 +131,43 @@ const TopNav = (props: any) => {
     const phrase = joinPhrase.replace(/\s/g, "").toLowerCase();
 
     try {
-      const response = await fetch(
-        "http://localhost:8000/api/files/joinGroup",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ phrase }),
-        }
+      const { data, status } = await axios.post(
+        "api/files/joinGroup",
+        { phrase },
+        { headers: { "Content-Type": "application/json" } }
       );
-      const data = await response.json();
-      const statusCode = data.status;
-      if (statusCode === 200) {
+
+      if (status === 200) {
         setJoinStatus("Joined Group Successfully");
-      } else if (statusCode === 404) {
+      } else if (status === 404) {
         console.log(data.message);
         setJoinStatus("Group Not Found");
       } else {
         console.log(data.message);
       }
-    } catch (error: any) {
+    } catch (error) {
       console.log(error);
     }
   };
 
   //Display groups
   const getGroups = async () => {
-    const response = await fetch(
-      "http://localhost:8000/api/files/getUserGroups",
-      {
-        method: "GET",
+    try {
+      const { data, status } = await axios.get("api/files/getUserGroups", {
         headers: { "Content-Type": "application/json" },
+      });
+
+      const groups = data.groups;
+
+      if (status === 200) {
+        setGroupList(groups);
+      } else if (status === 404) {
+        console.log(data.status + data.message);
+      } else {
+        console.log(data.status + data.message);
       }
-    );
-
-    const data = await response.json();
-    const statusCode = data.status;
-    const groups = data.groups;
-
-    if (statusCode === 200) {
-      setGroupList(groups);
-    } else if (statusCode === 404) {
-      console.log(data.status + data.message);
-    } else {
-      console.log(data.status + data.message);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -185,7 +179,6 @@ const TopNav = (props: any) => {
     }
   };
 
-  // ...
   const router = useRouter();
   const handleGroupRedirect = (group: any) => {
     router.push({

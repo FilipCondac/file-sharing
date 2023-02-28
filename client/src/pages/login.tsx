@@ -1,5 +1,6 @@
 import React, { FormEvent, useState } from "react";
 import TopNav from "@/components/TopNav";
+import axios from "axios";
 
 const register = () => {
   const [email, setEmail] = useState("");
@@ -8,24 +9,26 @@ const register = () => {
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:8000/api/files/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
 
-    const data = await response.json();
-    const user = data.user;
-    const statusCode = data.status;
+    try {
+      const { data, status } = await axios.post(
+        "api/files/login",
+        { email, password },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
-    // Use the user ID as needed
-    if (statusCode === 200) {
-      window.location.href = "/";
-      console.log(user);
-    } else if (statusCode === 404) {
-      setAccountError("Invalid credentials");
-    } else {
-      console.log(data.message);
+      const user = data.user;
+
+      if (status === 200) {
+        window.location.href = "/";
+        console.log(user);
+      } else if (status === 404) {
+        setAccountError("Invalid credentials");
+      } else {
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -49,25 +52,23 @@ const register = () => {
   };
 
   const resetPassword = async () => {
-    const response = await fetch(
-      "http://localhost:8000/api/files/resetPassword",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+    try {
+      const { data, status } = await axios.post(
+        "api/files/resetPassword",
+        { email },
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      if (status === 200) {
+        window.location.href = "/";
+        console.log(data.message);
+      } else if (status === 404) {
+        setAccountError("Invalid credentials");
+      } else {
+        console.log(data.message);
       }
-    );
-
-    const data = await response.json();
-    const statusCode = data.status;
-
-    if (statusCode === 200) {
-      window.location.href = "/";
-      console.log(data.message);
-    } else if (statusCode === 404) {
-      setAccountError("Invalid credentials");
-    } else {
-      console.log(data.message);
+    } catch (error) {
+      console.log(error);
     }
   };
 

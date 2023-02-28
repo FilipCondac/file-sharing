@@ -9,12 +9,9 @@ const index: NextPage<{ file: IFile }> = ({
   file: { format, name, sizeInBytes, id },
 }: any) => {
   const handleDownload = async () => {
-    const { data } = await axios.get(
-      `http://localhost:8000/api/files/id/${id}/download`,
-      {
-        responseType: "blob",
-      }
-    );
+    const { data } = await axios.get(`api/files/id/${id}/download`, {
+      responseType: "blob",
+    });
     fileDownload(data, name);
   };
   return (
@@ -40,9 +37,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { phrase } = context.query;
   let file;
   try {
-    const { data } = await axios.get(
-      `http://localhost:8000/api/files/phrase/${phrase}`
-    );
+    const { data } = await axios.get(`api/files/phrase/${phrase}`);
     file = data;
   } catch (error: any) {
     console.log(error.response.data);
