@@ -19,7 +19,7 @@ const register = () => {
 
       // Login the user
       const { data, status } = await axios.post(
-        "/api/files/login",
+        "api/files/login",
         { email, password },
         { headers: { "Content-Type": "application/json" } }
       );
