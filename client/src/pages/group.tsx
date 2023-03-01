@@ -15,15 +15,17 @@ const group = () => {
   const [group, setGroup] = React.useState<Group | null>(null);
   const [accountOptions, setAccountOptions] = React.useState(false);
   const [groupFiles, setGroupFiles] = React.useState<File[] | null>(null);
+  const [expandedFile, setExpandedFile] = useState(null as number | null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [file, setFile] = useState(null);
+  const [id, setID] = useState(null);
+  const [uploadingStatus, setUploadingStatus] = useState<
+    "Uploading" | "Upload Failed" | "Uploaded" | "Upload"
+  >("Upload");
 
   useEffect(() => {
-    // Call your function here
-    getGroup();
-  }, [router.query.groupID]);
-
-  useEffect(() => {
-    // Call your function here
     getFiles();
+    getGroup();
   }, [router.query.groupID]);
 
   const getGroup = async () => {
@@ -39,11 +41,6 @@ const group = () => {
       setGroup(null);
     }
   };
-  const [file, setFile] = useState(null);
-  const [id, setID] = useState(null);
-  const [uploadingStatus, setUploadingStatus] = useState<
-    "Uploading" | "Upload Failed" | "Uploaded" | "Upload"
-  >("Upload");
 
   const handleUpload = async () => {
     if (uploadingStatus === "Uploading") return;
@@ -86,8 +83,6 @@ const group = () => {
     setUploadingStatus("Upload");
   };
 
-  const [expandedFile, setExpandedFile] = useState(null as number | null);
-
   const renderFileDropdown = (fileIndex: number) => {
     if (expandedFile === fileIndex) {
       setExpandedFile(null);
@@ -95,6 +90,10 @@ const group = () => {
       setExpandedFile(fileIndex);
     }
   };
+
+  const filteredFiles = groupFiles?.files.filter((file) =>
+    file.filename.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="flex flex-col h-full dark [--scroll-mt:9.875rem] lg:[--scroll-mt:6.3125rem] dark:bg-slate-900 text-sky-400 font-Raleway mb-24">
@@ -105,9 +104,9 @@ const group = () => {
       {!accountOptions ? (
         <div className="flex flex-col items-center p-5 m-auto ">
           {group ? (
-            <div className="flex mb-8 font-bold capitalize  p-4 border text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre hover:shadow-[0_20px_60px_20px_rgba(235,206,235,0.05)] font-Raleway mr-10">
-              <div className="mr-10">
-                <div>
+            <div className="flex mb-8 font-bold  p-4 border text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre hover:shadow-[0_20px_60px_20px_rgba(235,206,235,0.05)] font-Raleway mr-10">
+              <div className="mr-10 capitalize ">
+                <div className="">
                   <h1 className="mb-8 text-2xl font-bold capitalize">
                     Group Details
                   </h1>
@@ -137,9 +136,9 @@ const group = () => {
                   </h1>
                 </div>
                 <div>
-                  <h1 className="mb-2 text-lg font-bold">Number of Files:</h1>
-                  <h1 className="mb-2 text-lg font-light text-sky-400">
-                    {group.createdAt}
+                  <h1 className="mb-2 text-lg font-bold">Owner:</h1>
+                  <h1 className="mb-2 text-sm font-light text-sky-400">
+                    {group.creator}
                   </h1>
                 </div>
               </div>
@@ -150,8 +149,15 @@ const group = () => {
                   </h1>
                 </div>
                 <h1 className="mb-2 text-lg font-bold">Files:</h1>
-                <div className="flex flex-col h-48 p-5 m-auto mb-10 overflow-scroll bg-gray-900 border rounded-2xl">
-                  {groupFiles?.files.map((file, i) => (
+                <div className="flex flex-col h-56 p-5 m-auto mb-10 overflow-scroll bg-gray-900 border rounded-2xl">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search files..."
+                    className="p-2 mb-2 text-sm bg-gray-800 border border-gray-700 rounded-md"
+                  />
+                  {filteredFiles?.map((file, i) => (
                     <div
                       key={i}
                       className={`flex flex-col p-4 mx-3 mt-3 mb-5 font-light bg-gray-800 border rounded-lg text-lg ${

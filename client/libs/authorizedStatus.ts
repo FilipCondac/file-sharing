@@ -1,16 +1,19 @@
+import axios from "axios";
+
 const authorizedStatus = async () => {
-  const response = await fetch(
-    "http://localhost:8000/api/files/authorizedStatus",
-    {
-      method: "GET",
+  try {
+    const { data } = await axios.get("api/files/authorizedStatus", {
       headers: { "Content-Type": "application/json" },
+    });
+
+    if (data.status !== 200) {
+      console.log(data.message);
     }
-  );
-  const data = await response.json();
-  if (data.status !== 200) {
-    console.log(data.message);
+
+    return data.user;
+  } catch (error) {
+    console.error(error);
   }
-  return data.user;
 };
 
 export default authorizedStatus;

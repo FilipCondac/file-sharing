@@ -17,9 +17,6 @@ const AccountOptions = () => {
     fetchAuthorizedStatus();
   }, []);
 
-  //   const deleteAccount = async () => {
-  //     try {
-
   const [displayName, setDisplayName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");

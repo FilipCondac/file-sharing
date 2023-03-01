@@ -6,6 +6,8 @@ import { useRouter } from "next/router";
 import axios from "axios";
 
 const TopNav = (props: any) => {
+  const router = useRouter();
+
   //Dropdown menu
   const [user, setUser] = React.useState(null);
   const [dropdown, setDropdown] = React.useState(false);
@@ -128,7 +130,7 @@ const TopNav = (props: any) => {
   //Join Group
   const handleSubmitJoin = async (event: React.FormEvent) => {
     event.preventDefault();
-    const phrase = joinPhrase.replace(/\s/g, "").toLowerCase();
+    const phrase = joinPhrase.toLowerCase();
 
     try {
       const { data, status } = await axios.post(
@@ -179,7 +181,6 @@ const TopNav = (props: any) => {
     }
   };
 
-  const router = useRouter();
   const handleGroupRedirect = (group: any) => {
     router.push({
       pathname: "/group",
@@ -330,7 +331,7 @@ const TopNav = (props: any) => {
                       <h2 className="m-auto mt-3">Groups</h2>
                       {groupList.map((group, i) => (
                         <div
-                          className="flex p-3 mt-2 bg-gray-800 border rounded-lg"
+                          className="flex p-3 mt-2 bg-gray-800 border rounded-lg cursor-pointer"
                           key={i}
                           onClick={() => handleGroupRedirect(group)}
                         >

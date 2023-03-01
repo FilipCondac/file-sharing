@@ -98,6 +98,7 @@ router.post("/upload", upload.single("myFile"), async (req, res) => {
   }
 });
 
+// @route POST /api/files/groupUpload
 router.post("/groupUpload", upload.single("myFile"), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ message: "No file uploaded" });
@@ -144,6 +145,7 @@ router.post("/groupUpload", upload.single("myFile"), async (req, res) => {
   }
 });
 
+// @route GET /api/files/getFilesByGroup/:groupID - This route is used to get file details by group
 router.get("/getFilesByGroup/:groupID", async (req, res) => {
   try {
     const groupID = req.params.groupID;
@@ -228,6 +230,7 @@ router.get("/id/:id/download", async (req, res) => {
   }
 });
 
+// @route POST /api/files/register - This route is used to register a user
 router.post("/register", async (req, res) => {
   const { email, password } = req.body;
 
@@ -251,6 +254,7 @@ router.post("/register", async (req, res) => {
     });
 });
 
+// @route POST /api/files/login - This route is used to login a user
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   const auth = getAuth();
@@ -273,6 +277,7 @@ router.post("/login", async (req, res) => {
     });
 });
 
+// @route GET /api/files/authorizedStatus - This route is used to check if a user is logged in
 router.get("/authorizedStatus", async (req, res) => {
   const auth = getAuth();
   onAuthStateChanged(auth, (user) => {
@@ -294,6 +299,7 @@ router.get("/authorizedStatus", async (req, res) => {
   });
 });
 
+// @route GET /api/files/logout - This route is used to logout a user
 router.get("/logout", async (req, res) => {
   const auth = getAuth();
   signOut(auth)
@@ -310,6 +316,7 @@ router.get("/logout", async (req, res) => {
     });
 });
 
+// @route POST /api/files/updateAccount - This route is used to update a user's account
 router.post("/updateAccount", async (req, res) => {
   const { displayName, email, password } = req.body;
   const auth = getAuth();
@@ -360,6 +367,7 @@ router.post("/updateAccount", async (req, res) => {
   }
 });
 
+// @route POST /api/files/deleteAccount - This route is used to delete a user's account
 router.post("/deleteAccount", async (req, res) => {
   const auth = getAuth();
   const user = auth.currentUser;
@@ -382,6 +390,7 @@ router.post("/deleteAccount", async (req, res) => {
   }
 });
 
+// @route POST /api/files/resetPassword - This route is used to reset a user's password
 router.post("/resetPassword", async (req, res) => {
   const { email } = req.body;
   const auth = getAuth();
@@ -402,16 +411,17 @@ router.post("/resetPassword", async (req, res) => {
     });
 });
 
+// @route POST /api/files/createGroup - This route is used to create a group
 router.post("/createGroup", async (req, res) => {
   const { groupName } = req.body;
   const wordPhrase = await randomWords({ exactly: 3, join: " " });
-  const dbPhrase = wordPhrase.replace(/\s/g, "");
+
   const auth = getAuth();
   const creator = auth.currentUser?.uid;
   try {
     const group = await Group.create({
       groupname: groupName,
-      phrase: dbPhrase,
+      phrase: wordPhrase,
       members: [creator],
       creator: creator,
     });
@@ -429,6 +439,7 @@ router.post("/createGroup", async (req, res) => {
   }
 });
 
+// @route GET /api/files/getUserGroups - This route is used to get all the groups a user is a part of
 router.get("/getUserGroups", async (req, res) => {
   const auth = getAuth();
   const user = auth.currentUser?.uid;
@@ -444,6 +455,7 @@ router.get("/getUserGroups", async (req, res) => {
   }
 });
 
+// @route POST /api/files/joinGroup - This route is used to join a group
 router.post("/joinGroup", async (req, res) => {
   const { phrase } = req.body;
   const auth = getAuth();
@@ -474,6 +486,7 @@ router.post("/joinGroup", async (req, res) => {
   }
 });
 
+// @route GET /api/files/group/:groupID - This route is used to get a group by ID
 router.get("/group/:groupID", async (req, res) => {
   try {
     const id = req.params.groupID;
@@ -482,12 +495,13 @@ router.get("/group/:groupID", async (req, res) => {
       return res.status(404).json({ message: "Group does not exist" });
     }
 
-    const { groupname, phrase, members, files } = group;
+    const { groupname, phrase, members, files, creator } = group;
     return res.status(200).json({
       name: groupname,
       phrase: phrase,
       members: members,
       files: files,
+      creator,
     });
   } catch (error) {
     return res

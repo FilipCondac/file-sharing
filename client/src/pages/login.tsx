@@ -6,6 +6,7 @@ const register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [accountError, setAccountError] = useState("");
+  const [emailForm, setEmailForm] = useState(false);
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -45,7 +46,6 @@ const register = () => {
   //   // const user = data.user;
   //   // const statusCode = data.status;
   // };
-  const [emailForm, setEmailForm] = useState(false);
 
   const loadEmailForm = () => {
     setEmailForm(true);
