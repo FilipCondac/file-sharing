@@ -5,6 +5,7 @@ import axios from "axios";
 const register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -13,7 +14,7 @@ const register = () => {
       // Register the user
       await axios.post(
         "api/files/register",
-        { email, password },
+        { email, password, displayName },
         { headers: { "Content-Type": "application/json" } }
       );
 
@@ -49,6 +50,14 @@ const register = () => {
         className="m-auto mt-5 border p-20 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre text-center hover:shadow-[0_20px_60px_20px_rgba(235,206,235,0.2)]"
       >
         <div className="m-auto">
+          <div>
+            <input
+              className="p-1 mb-3 border rounded-lg bg-slate-700"
+              value={displayName}
+              placeholder="Display Name"
+              onChange={(e) => setDisplayName(e.target.value)}
+            />
+          </div>
           <div>
             <input
               className="p-1 mb-3 border rounded-lg bg-slate-700"

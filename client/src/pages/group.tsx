@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import AccountOptions from "@/components/AccountOptions";
 import DropBox from "@/components/DropBox";
 import FileRender from "@/components/FileRender";
+import fileDownload from "js-file-download";
 
 const group = () => {
   const router = useRouter();
@@ -22,11 +23,17 @@ const group = () => {
   const [uploadingStatus, setUploadingStatus] = useState<
     "Uploading" | "Upload Failed" | "Uploaded" | "Upload"
   >("Upload");
+  const [groupCreator, setGroupCreator] = useState(false);
 
   useEffect(() => {
     getFiles();
     getGroup();
+    // getUsername(group?.members);
   }, [router.query.groupID]);
+
+  useEffect(() => {
+    groupOwner();
+  }, [group]);
 
   const getGroup = async () => {
     console.log(router.query);
@@ -34,7 +41,6 @@ const group = () => {
 
     try {
       const { data } = await axios.get(`api/files/group/${groupID}`);
-      console.log(data);
       setGroup(data);
     } catch (error: unknown) {
       console.log(error);
@@ -42,13 +48,26 @@ const group = () => {
     }
   };
 
+  const handleDownload = async (id: string, name: string) => {
+    const { data } = await axios.get(`api/files/id/${id}/download`, {
+      responseType: "blob",
+    });
+    fileDownload(data, name);
+  };
+
   const handleUpload = async () => {
     if (uploadingStatus === "Uploading") return;
     setUploadingStatus("Uploading");
     const formData = new FormData();
-    formData.append("myFile", file);
+    if (file) {
+      formData.append("myFile", file);
+    }
+
     const { groupID } = router.query;
-    formData.append("groupID", groupID);
+    if (groupID) {
+      formData.append("groupID", groupID);
+    }
+
     try {
       const { data } = await axios({
         method: "POST",
@@ -66,6 +85,46 @@ const group = () => {
     }
   };
 
+  const getUsername = async (members: string[]) => {
+    members = members || [];
+    try {
+      const { data } = await axios.post("api/files/getUsername", {
+        members: members,
+      });
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      const confirmed = window.confirm(
+        "ARE YOU SURE YOU WANT TO DELETE GROUP? THIS CANNOT BE UNDONE."
+      );
+      const id = router.query.groupID;
+      if (confirmed) {
+        const { data } = await axios.delete(`api/files/deleteGroup/${id}`);
+        window.location.href = "/";
+        console.log(data.message);
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
+  const groupOwner = async () => {
+    const dataUser = await isAuthorized;
+    const groupCreator = await group?.creator;
+    if (dataUser?.uid === groupCreator) {
+      setGroupCreator(true);
+    } else {
+      setGroupCreator(false);
+    }
+  };
+
   const getFiles = async () => {
     const { groupID } = router.query;
     try {
@@ -73,7 +132,7 @@ const group = () => {
       console.log(data);
       setGroupFiles(data);
     } catch (error: any) {
-      console.log(error.response.data);
+      console.log(error);
       setGroupFiles(null);
     }
   };
@@ -96,7 +155,7 @@ const group = () => {
   );
 
   return (
-    <div className="flex flex-col h-full dark [--scroll-mt:9.875rem] lg:[--scroll-mt:6.3125rem] dark:bg-slate-900 text-sky-400 font-Raleway mb-24">
+    <div className="flex flex-col h-full dark [--scroll-mt:9.875rem] lg:[--scroll-mt:6.3125rem] w-full dark:bg-slate-900 text-sky-400 font-Raleway mb-24">
       <TopNav
         isAuthorized={isAuthorized}
         setAccountOptions={setAccountOptions}
@@ -105,7 +164,8 @@ const group = () => {
         <div className="flex flex-col items-center p-5 m-auto ">
           {group ? (
             <div className="flex mb-8 font-bold  p-4 border text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre hover:shadow-[0_20px_60px_20px_rgba(235,206,235,0.05)] font-Raleway mr-10">
-              <div className="mr-10 capitalize ">
+              {/* Group details */}
+              <div className="w-1/3 mr-10 capitalize">
                 <div className="">
                   <h1 className="mb-8 text-2xl font-bold capitalize">
                     Group Details
@@ -137,17 +197,43 @@ const group = () => {
                 </div>
                 <div>
                   <h1 className="mb-2 text-lg font-bold">Owner:</h1>
-                  <h1 className="mb-2 text-sm font-light text-sky-400">
-                    {group.creator}
+                  <h1 className="mb-2 text-lg font-light text-sky-400">
+                    {group.membersDisplay[0]}
                   </h1>
                 </div>
+                <div>
+                  {groupCreator && (
+                    <div
+                      className="flex justify-center p-1 mt-10 text-center bg-red-600 border rounded-md cursor-pointer"
+                      onClick={handleDelete}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                        />
+                      </svg>
+                      <span className="font-bold">DELETE GROUP</span>
+                    </div>
+                  )}
+                </div>
               </div>
-              <div className="">
+              <div className="w-1/3">
                 <div>
                   <h1 className="mb-8 text-2xl font-bold capitalize">
                     {group.name}
                   </h1>
                 </div>
+
+                {/* files */}
                 <h1 className="mb-2 text-lg font-bold">Files:</h1>
                 <div className="flex flex-col h-56 p-5 m-auto mb-10 overflow-scroll bg-gray-900 border rounded-2xl">
                   <input
@@ -160,7 +246,7 @@ const group = () => {
                   {filteredFiles?.map((file, i) => (
                     <div
                       key={i}
-                      className={`flex flex-col p-4 mx-3 mt-3 mb-5 font-light bg-gray-800 border rounded-lg text-lg ${
+                      className={`flex flex-col p-2 mx-3 mt-3 mb-5 font-light bg-gray-800 border rounded-lg text-lg ${
                         expandedFile === i ? "border-sky-400" : ""
                       }`}
                     >
@@ -183,7 +269,50 @@ const group = () => {
                             />
                           </svg>
                         </div>
-                        {expandedFile === i && file.filename}
+                        {expandedFile === i && (
+                          <div className="flex flex-col">
+                            <div className="flex flex-col">
+                              <h1 className="mt-2 text-sm font-bold">
+                                File ID:{" "}
+                                <span className="font-light">{file._id}</span>
+                              </h1>
+                            </div>
+                            <div className="flex flex-col">
+                              <h1 className="mt-2 text-sm font-bold">
+                                Size:{" "}
+                                <span className="font-light">
+                                  {file.sizeInBytes}
+                                  <span className="ml-1 font-bold">mb</span>
+                                </span>
+                              </h1>
+                            </div>
+                            <div className="flex flex-col">
+                              <h1 className="mt-2 text-sm font-bold">
+                                Format:{" "}
+                                <span className="font-light">
+                                  {file.format}
+                                </span>
+                              </h1>
+                            </div>
+                            <div className="flex flex-col">
+                              <button
+                                className="inline-flex items-center px-4 py-2 m-auto mt-3 font-bold text-gray-800 bg-gray-300 rounded hover:bg-gray-400"
+                                onClick={() =>
+                                  handleDownload(file._id, file.filename)
+                                }
+                              >
+                                <svg
+                                  className="w-4 h-4 mr-2 fill-current"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
+                                </svg>
+                                <span>Download</span>
+                              </button>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -246,6 +375,20 @@ const group = () => {
                       </div>
                     )}
                   </div>
+                </div>
+              </div>
+              {/* Members */}
+              <div className="flex w-1/3">
+                <div className="flex flex-col w-full ml-7">
+                  <h1 className="text-2xl">Members</h1>
+                  {group.membersDisplay?.map((member: string, i: number) => (
+                    <div
+                      key={i}
+                      className="flex flex-col p-2 mt-3 mb-5 font-light bg-gray-800 border rounded-lg border-sky-400"
+                    >
+                      <span className="w-64 text-lg">{member}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

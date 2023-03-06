@@ -17,6 +17,10 @@ const groupSchema = new Schema(
       type: Array,
       required: true,
     },
+    membersDisplay: {
+      type: Array,
+      required: true,
+    },
     files: {
       type: Array,
       required: true,
@@ -34,6 +38,7 @@ interface IGroup extends Document {
   groupname: String;
   phrase: String;
   members: Array<String>;
+  membersDisplay: Array<String>;
   files: Array<String>;
   creator: String;
 }

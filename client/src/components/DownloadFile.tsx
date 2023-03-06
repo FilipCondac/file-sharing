@@ -1,7 +1,6 @@
 import React, { ReactElement } from "react";
 
 const DownloadFile: React.FC = ({ downloadPageLink, phrase }): ReactElement => {
-  
   const handleLinkClick = () => {
     window.location.href = downloadPageLink;
   };

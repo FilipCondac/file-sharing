@@ -21,6 +21,7 @@ const AccountOptions = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [accountError, setAccountError] = React.useState("");
+
   const updateAccount = async () => {
     try {
       const { status } = await axios.post(
@@ -34,8 +35,6 @@ const AccountOptions = () => {
       } else {
         setAccountError("Invalid credentials");
       }
-
-      console.log(response.data);
     } catch (error) {
       console.error(error);
     }

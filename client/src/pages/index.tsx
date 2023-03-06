@@ -8,6 +8,7 @@ import DownloadFile from "@/components/DownloadFile";
 import React from "react";
 import authorizedStatus from "../../libs/authorizedStatus";
 import AccountOptions from "@/components/AccountOptions";
+import QRCode from "qrcode";
 
 const App = () => {
   //Call the useState hook to create a state variable called file
@@ -21,6 +22,7 @@ const App = () => {
   const [uploadingStatus, setUploadingStatus] = useState<
     "Uploading" | "Upload Failed" | "Uploaded" | "Upload"
   >("Upload");
+  const [qrCodeDataUrl, setQRCodeDataUrl] = useState("");
 
   const isAuthorized = authorizedStatus();
 
@@ -64,11 +66,19 @@ const App = () => {
     setFile(null);
     setPhrase(null);
     setdownloadPageLink(null);
+    setQRCodeDataUrl("");
     setUploadingStatus("Upload");
   };
 
+  const generateQRCode = async () => {
+    if (downloadPageLink) {
+      const qrCode = await QRCode.toDataURL(downloadPageLink);
+      setQRCodeDataUrl(qrCode);
+    }
+  };
+
   return (
-    <main className="flex flex-col h-full dark [--scroll-mt:9.875rem] lg:[--scroll-mt:6.3125rem] dark:bg-slate-900 text-sky-400 font-Raleway">
+    <main className="flex flex-col h-full overflow-auto dark:bg-slate-900 text-sky-400 font-Raleway">
       <TopNav
         isAuthorized={isAuthorized}
         setAccountOptions={setAccountOptions}
@@ -85,7 +95,7 @@ const App = () => {
             </div>
           )}
 
-          <div className="flex flex-col m-auto mt-10">
+          <div className="flex flex-col m-auto">
             <div className="m-auto rounded-md h-72 w-96">
               {/* Pass setFile updated variable to the DropBox component */}
               {!file && componentRender && <DropBox setFile={setFile} />}
@@ -152,9 +162,40 @@ const App = () => {
                     downloadPageLink={downloadPageLink}
                     phrase={phrase}
                   />
-                  <div className="m-auto">
+                  {qrCodeDataUrl && (
+                    <div className="m-auto">
+                      <img
+                        src={qrCodeDataUrl}
+                        className="m-auto mb-4 border"
+                        alt="QR code"
+                      />{" "}
+                    </div>
+                  )}
+                  <button
+                    className="flex items-center px-4 py-2 m-auto mb-10 font-bold text-gray-800 bg-gray-300 rounded hover:bg-gray-400"
+                    onClick={generateQRCode}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-6 h-6 mr-2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3l-3 3"
+                      />
+                    </svg>
+
+                    <span>Generate QR </span>
+                  </button>
+
+                  <div className="m-auto mb-10">
                     <button
-                      className="flex items-center px-4 py-2 m-auto font-bold text-gray-800 bg-gray-300 rounded hover:bg-gray-400"
+                      className="flex items-center px-4 py-2 m-auto mb-10 font-bold text-gray-800 bg-gray-300 rounded hover:bg-gray-400"
                       onClick={resetComponent}
                     >
                       <svg

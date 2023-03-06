@@ -36,6 +36,8 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const fireApp = initializeApp(firebaseConfig);
+const admin = require("firebase-admin");
+
 // const provider = new GoogleAuthProvider();
 // provider.addScope("https://www.googleapis.com/auth/contacts.readonly");
 export const fireAuth = getAuth(fireApp);
@@ -232,18 +234,29 @@ router.get("/id/:id/download", async (req, res) => {
 
 // @route POST /api/files/register - This route is used to register a user
 router.post("/register", async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, displayName } = req.body;
 
   const auth = getAuth();
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Signed in
       const user = userCredential.user;
-      res.status(200).json({
-        status: 200,
-        message: "User created successfully",
-        user: user,
-      });
+      updateProfile(user, { displayName: displayName })
+        .then(() => {
+          console.log("User display name set successfully");
+          res.status(200).json({
+            status: 200,
+            message: "User created successfully",
+            user: user,
+          });
+        })
+        .catch((error) => {
+          console.log("Error setting user display name:", error.message);
+          res.status(500).json({
+            status: 500,
+            message: "Error setting user display name",
+          });
+        });
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -418,11 +431,13 @@ router.post("/createGroup", async (req, res) => {
 
   const auth = getAuth();
   const creator = auth.currentUser?.uid;
+  const creatorDisplayName = auth.currentUser?.displayName;
   try {
     const group = await Group.create({
       groupname: groupName,
       phrase: wordPhrase,
       members: [creator],
+      membersDisplay: [creatorDisplayName],
       creator: creator,
     });
     console.log(group);
@@ -460,11 +475,12 @@ router.post("/joinGroup", async (req, res) => {
   const { phrase } = req.body;
   const auth = getAuth();
   const user = auth.currentUser?.uid;
+  const userDisplayName = auth.currentUser?.displayName;
   try {
     // Find the document with the given phrase and add the user ID to the "members" array
     const group = await Group.findOneAndUpdate(
       { phrase: phrase },
-      { $push: { members: user } },
+      { $addToSet: { members: user, membersDisplay: userDisplayName } },
       { new: true }
     );
 
@@ -495,11 +511,13 @@ router.get("/group/:groupID", async (req, res) => {
       return res.status(404).json({ message: "Group does not exist" });
     }
 
-    const { groupname, phrase, members, files, creator } = group;
+    const { groupname, phrase, members, files, creator, membersDisplay } =
+      group;
     return res.status(200).json({
       name: groupname,
       phrase: phrase,
       members: members,
+      membersDisplay: membersDisplay,
       files: files,
       creator,
     });
@@ -507,6 +525,51 @@ router.get("/group/:groupID", async (req, res) => {
     return res
       .status(500)
       .json({ message: "Server Error finding group by ID" });
+  }
+});
+
+router.post("/getUsername", async (req, res) => {
+  // Retrieve user IDs from query string
+  const { members } = req.body;
+
+  console.log(members);
+  if (Array.isArray(members)) {
+    const displayNames = members.map((uid) =>
+      admin
+        .auth()
+        .getUser(uid)
+        .then((user: any) => user.displayName)
+    );
+    Promise.all(displayNames)
+      .then((displayNames) => {
+        console.log(displayNames);
+        res.status(200).json(displayNames);
+      })
+      .catch((error) => {
+        console.log("Error getting users:", error);
+        res.status(500).json({ error: "Unable to retrieve display names." });
+      });
+  } else {
+    res.status(400).json({ error: "Invalid request parameters." });
+  }
+});
+
+router.delete("/deleteGroup/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deletedGroup = await Group.findByIdAndDelete(id);
+    if (!deletedGroup) {
+      return res.status(404).json({ message: "Group does not exist" });
+    }
+
+    return res.status(200).json({
+      message: "Group deleted successfully",
+      deletedGroup: deletedGroup,
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Server Error deleting group by ID" });
   }
 });
 

@@ -191,7 +191,7 @@ const TopNav = (props: any) => {
   };
 
   return (
-    <div className="w-full h-16 p-0 text-gray-500">
+    <div className="fixed w-full h-16 p-0 text-gray-500">
       <div className="float-left">
         <h2 className="w-64 h-48 m-4 text-4xl font-bold ">
           <span onClick={handleRedirect} className="cursor-pointer">
