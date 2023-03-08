@@ -7,8 +7,12 @@ module.exports = {
         Raleway: ["Raleway", "sans-serif"],
       },
       colors: {
-        yellow: {
-          light: "#FFC26D",
+        primarycolor: {
+          dark: "#03001C",
+          dark2: "#19003c",
+          purple: "#301E67",
+          light: "#5B8FB9",
+          lightest: "#B6EADA",
         },
       },
       boxShadow: {

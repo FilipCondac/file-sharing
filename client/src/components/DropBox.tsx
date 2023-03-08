@@ -36,13 +36,13 @@ const DropBox: React.FunctionComponent<{ setFile: React.Dispatch<any> }> = ({
 
   // Set the main class to the default class and change it if the file is accepted or rejected
   let mainClass =
-    "items-center h-full border text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre hover:shadow-[0_20px_60px_20px_rgba(235,206,235,0.025)]";
+    "items-center h-full  text-primarycolor-lightest rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre hover:shadow-[0_20px_60px_20px_rgba(235,206,235,0.025)]";
   if (isDragReject) {
     mainClass =
-      "items-center h-full shadow-[0_20px_60px_20px_rgba(255,100,0,0.1)] text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre hover:wiggle";
+      "items-center h-full shadow-[0_20px_60px_20px_rgba(255,100,0,0.1)] text-slate-400 rounded-2xl bg-gradient-to-r border-slate-600 from-slate-800 to-slate-900 justify-centre hover:wiggle";
   } else if (isDragAccept) {
     mainClass =
-      "items-center h-full shadow-[0_20px_60px_20px_rgba(0,255,0,0.1)] text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre hover:wiggle";
+      "items-center h-full shadow-[0_20px_60px_20px_rgba(0,255,0,0.1)] text-slate-400 rounded-2xl bg-gradient-to-r border-slate-600 from-slate-800 to-slate-900 justify-centre hover:wiggle";
   }
 
   return (
@@ -50,11 +50,21 @@ const DropBox: React.FunctionComponent<{ setFile: React.Dispatch<any> }> = ({
     <div {...getRootProps()} className={mainClass}>
       <input {...getInputProps()} />
       <div className="flex flex-col">
-        <img
-          src="/images/icons/folder.png"
-          alt="folder"
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
           className="w-16 h-16 m-auto"
-        ></img>
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M9 13.5l3 3m0 0l3-3m-3 3v-6m1.06-4.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
+          />
+        </svg>
+
         {/* Add check if files are not accepted display message to user */}
         {isDragReject ? (
           <p className="m-auto">File type not accepted</p>

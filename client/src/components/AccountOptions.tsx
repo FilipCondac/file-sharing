@@ -62,7 +62,7 @@ const AccountOptions = () => {
   };
 
   return (
-    <div className="flex flex-col p-10 border w-96 text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 font-Raleway">
+    <div className="flex flex-col p-10 border w-96 text-slate-400 rounded-2xl border-slate-600 bg-gradient-to-r from-slate-800 to-slate-900 font-Raleway">
       <h1 className="m-auto mb-5 text-2xl font-semibold">Account Options</h1>
       <div className="flex flex-col">
         <form className="">

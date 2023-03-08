@@ -75,11 +75,18 @@ router.post("/upload", upload.single("myFile"), async (req, res) => {
       const wordPhrase = await randomWords({ exactly: 3, join: " " });
       const dbPhrase = wordPhrase.replace(/\s/g, "");
 
+      const auth = getAuth();
+      let userID = "";
+      if (auth.currentUser) {
+        userID = auth.currentUser.uid;
+      }
+
       // Create new file document in MongoDB
       const file = await File.create({
         filename: originalname,
         sizeInBytes: bytes,
         phrase: dbPhrase,
+        creator: userID,
         secure_url,
         format,
       });
@@ -570,6 +577,68 @@ router.delete("/deleteGroup/:id", async (req, res) => {
     return res
       .status(500)
       .json({ message: "Server Error deleting group by ID" });
+  }
+});
+
+router.post("/leaveGroup", async (req, res) => {
+  const { groupID } = req.body;
+  const auth = getAuth();
+
+  const user = auth.currentUser?.uid;
+  const userDisplayName = auth.currentUser?.displayName;
+  try {
+    // Find the group by ID
+    const group = await Group.findById(groupID);
+
+    // Check if group exists
+    if (!group) {
+      return res.status(404).json({ message: "Group does not exist" });
+    }
+
+    // Check if user is a member of the group
+    if (user) {
+      const isMember = group.members.includes(user);
+      if (!isMember) {
+        return res
+          .status(400)
+          .json({ message: "You are not a member of this group" });
+      }
+    }
+
+    // Remove the user from the group's members array
+    const updatedGroup = await Group.findByIdAndUpdate(
+      groupID,
+      { $pull: { members: user, membersDisplay: userDisplayName } },
+      { new: true }
+    );
+
+    return res.status(200).json({
+      message: "You have left the group",
+      group: updatedGroup,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server Error" });
+  }
+});
+
+router.get("/getUserFiles", async (req, res) => {
+  const auth = getAuth();
+  const user = auth.currentUser?.uid;
+
+  if (!user) {
+    return res.status(200).json({ files: [], status: 401 });
+  } else {
+    try {
+      const files = await File.find({ creator: user });
+      console.log(files);
+      return res.status(200).json({ files: files, status: 200 });
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(500)
+        .json({ message: "Server Error while trying to get files" });
+    }
   }
 });
 

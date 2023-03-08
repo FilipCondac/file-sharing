@@ -27,7 +27,7 @@ const index: NextPage<{ file: IFile }> = ({
     setQRCodeDataUrl(qrCode);
   };
   return (
-    <div className="flex flex-col items-center h-full overflow-auto text-xl text-black font-Raleway bg-slate-900">
+    <div className="flex flex-col items-center h-full overflow-auto text-xl text-black font-Raleway bg-primarycolor-dark">
       <TopNav />
       <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full overflow-auto">
         {!id ? (
@@ -35,26 +35,26 @@ const index: NextPage<{ file: IFile }> = ({
         ) : (
           <>
             <div className="fixed flex flex-col mr-96 -ml-96 w-80">
-              <h1 className="text-4xl font-semibold text-white">
+              <h1 className="text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-600">
                 Take your sharing to the next level with our intuitive file
                 sharing tools.
               </h1>
-              <p className="mt-5 text-2xl font-semibold text-white">
-                Share files your own way
+              <p className="mt-5 text-2xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-sky-300 to-blue-600">
+                Share files your way
               </p>
-              <p className="mt-2 text-2xl font-light text-white">
+              <p className="mt-2 text-2xl font-light text-transparent bg-clip-text bg-gradient-to-r from-sky-200 to-blue-400">
                 - Link Sharing
               </p>
-              <p className="mt-2 text-2xl font-light text-white">
+              <p className="mt-2 text-2xl font-light text-transparent bg-clip-text bg-gradient-to-r from-sky-200 to-blue-400">
                 - Group Sharing
               </p>
-              <p className="mt-2 text-2xl font-light text-white">
+              <p className="mt-2 text-2xl font-light text-transparent bg-clip-text bg-gradient-to-r from-sky-200 to-blue-400">
                 - QR Sharing
               </p>
-              <p className="mt-2 text-2xl font-light text-white">
+              <p className="mt-2 text-2xl font-light text-transparent bg-clip-text bg-gradient-to-r from-sky-200 to-blue-400">
                 - Phrase Sharing
               </p>
-              <p className="mt-2 text-2xl font-light text-white">
+              <p className="mt-2 text-2xl font-light text-transparent bg-clip-text bg-gradient-to-r from-sky-200 to-blue-400">
                 - Email Sharing
               </p>
             </div>

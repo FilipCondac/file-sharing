@@ -54,7 +54,7 @@ const PhraseSearch: React.FC<Props> = (props: any) => {
   };
 
   return (
-    <div className="flex flex-col items-center p-5 m-auto mb-10 border text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre font-Raleway">
+    <div className="flex flex-col items-center p-5 m-auto mb-10 text-primarycolor-lightest rounded-xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre font-Raleway">
       {/* The code bellow does the following:
     1. It checks if the file variable is undefined or not. If it is undefined, then it shows a form to search for the file.
     2. If the file variable is defined, then it shows the file contents. */}
@@ -65,7 +65,7 @@ const PhraseSearch: React.FC<Props> = (props: any) => {
               type="text"
               placeholder="Search..."
               value={searchTerm}
-              className="p-1 rounded-lg bg-slate-700"
+              className="p-1 rounded-lg bg-slate-700 "
               onChange={(event) => setSearchTerm(event.target.value)}
             />
             <button type="submit" className="ml-3">

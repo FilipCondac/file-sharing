@@ -25,6 +25,9 @@ const fileSchema = new Schema(
       type: Number,
       required: true,
     },
+    creator: {
+      type: String,
+    },
     sender: {
       type: String,
     },
@@ -45,6 +48,7 @@ interface IFile extends Document {
   format: String;
   phrase: String;
   sizeInBytes: String;
+  creator: String;
   sender?: String;
   group?: String;
   receiver?: String;

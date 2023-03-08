@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import authorizedStatus from "libs/authorizedStatus";
 import logout from "libs/logout";
 import { useRouter } from "next/router";
@@ -25,6 +25,10 @@ const TopNav = (props: any) => {
   const [joinPhrase, setJoinPhrase] = React.useState("");
   const [groupWordPhrase, setGroupWordPhrase] = React.useState("");
   const [joinStatus, setJoinStatus] = React.useState("");
+
+  useEffect(() => {
+    getGroups();
+  }, [joinStatus, groupName]);
 
   //Get User Status
   React.useEffect(() => {
@@ -191,15 +195,15 @@ const TopNav = (props: any) => {
   };
 
   return (
-    <div className="fixed z-10 w-full h-16 p-0 text-gray-500">
+    <div className="z-10 w-full h-16 p-0 mb-10 text-gray-500">
       <div className="float-left">
-        <h2 className="w-64 h-48 m-4 text-5xl font-bold text-white">
+        <h2 className="w-64 h-48 m-4 text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-200 to-sky-400">
           <span onClick={handleRedirect} className="cursor-pointer">
             SharePal
           </span>
         </h2>
       </div>
-      <div className="flex float-right m-3 mt-1 text-lg font-light text-gray-400">
+      <div className="flex float-right m-3 mt-1 text-lg font-light text-primarycolor-lightest">
         {/* Check for user before rendering */}
         {user ? (
           <div className="flex flex-col float-right ">
@@ -328,7 +332,7 @@ const TopNav = (props: any) => {
                         )}
                       </div>
                       {/* List groups user is part of */}
-                      <h2 className="m-auto mt-3">Groups</h2>
+                      <h2 className="m-auto mt-3 ">Groups</h2>
                       {groupList.map((group, i) => (
                         <div
                           className="flex p-3 mt-2 bg-gray-800 border rounded-lg cursor-pointer"
@@ -475,10 +479,12 @@ const TopNav = (props: any) => {
           // If user isnt logged in
           <>
             <Link href={"/login"}>
-              <button className="m-5">Login </button>
+              <button className="m-5 text-primarycolor-lightest">Login </button>
             </Link>
             <Link href={"/register"}>
-              <button className="m-5">Sign Up</button>
+              <button className="m-5 text-primarycolor-lightest">
+                Sign Up
+              </button>
             </Link>
           </>
         )}

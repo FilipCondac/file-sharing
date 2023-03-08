@@ -39,10 +39,10 @@ const register = () => {
   };
 
   return (
-    <div className="flex flex-col h-full dark [--scroll-mt:9.875rem] lg:[--scroll-mt:6.3125rem] dark:bg-slate-900 text-sky-400 font-Raleway m-auto ">
+    <div className="flex flex-col h-full m-auto bg-primarycolor-dark text-primarycolor-lightest font-Raleway ">
       <TopNav />
 
-      <h1 className="m-auto mb-0 text-lg font-bold text-center text-gray-400">
+      <h1 className="m-auto mb-0 text-lg font-bold text-center text-primarycolor-lightest">
         Create an account with us
       </h1>
       <form
