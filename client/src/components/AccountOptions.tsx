@@ -62,12 +62,12 @@ const AccountOptions = () => {
   };
 
   return (
-    <div className="flex flex-col p-5 mx-5 w-max border text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 hover:shadow-[0_20px_60px_20px_rgba(235,206,235,0.025)] font-Raleway">
-      <h1 className="m-auto font-semibold">Account Options</h1>
+    <div className="flex flex-col p-10 border w-96 text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 font-Raleway">
+      <h1 className="m-auto mb-5 text-2xl font-semibold">Account Options</h1>
       <div className="flex flex-col">
-        <form className="w-60">
+        <form className="">
           <div className="flex flex-col mb-5">
-            <label className="mr-10">Display Name:</label>
+            <label className="mr-10 text-lg">Display Name:</label>
             <input
               type="text"
               className="p-1 px-2 rounded-lg bg-slate-700"
@@ -76,7 +76,7 @@ const AccountOptions = () => {
             ></input>
           </div>
           <div className="flex flex-col mb-5">
-            <label className="mr-10">E-Mail:</label>
+            <label className="mr-10 text-lg">E-Mail:</label>
             <input
               type="text"
               className="p-1 px-2 rounded-lg bg-slate-700"
@@ -85,7 +85,7 @@ const AccountOptions = () => {
             ></input>
           </div>
           <div className="flex flex-col mb-5">
-            <label className="mr-10">Password:</label>
+            <label className="mr-10 text-lg">Password:</label>
             <input
               type="password"
               className="p-1 px-2 rounded-lg bg-slate-700"

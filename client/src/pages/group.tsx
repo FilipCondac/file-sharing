@@ -155,17 +155,17 @@ const group = () => {
   );
 
   return (
-    <div className="flex flex-col h-full dark [--scroll-mt:9.875rem] lg:[--scroll-mt:6.3125rem] w-full dark:bg-slate-900 text-sky-400 font-Raleway mb-24">
+    <div className="flex flex-col w-full h-full mb-24 dark dark:bg-slate-900 text-sky-400 font-Raleway">
       <TopNav
         isAuthorized={isAuthorized}
         setAccountOptions={setAccountOptions}
       />
       {!accountOptions ? (
-        <div className="flex flex-col items-center p-5 m-auto ">
+        <div className="flex flex-col items-center p-5 m-auto mt-20 ">
           {group ? (
-            <div className="flex mb-8 font-bold  p-4 border text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre hover:shadow-[0_20px_60px_20px_rgba(235,206,235,0.05)] font-Raleway mr-10">
+            <div className="flex p-4 mb-8 mr-10 font-bold border border- text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre font-Raleway">
               {/* Group details */}
-              <div className="w-1/3 mr-10 capitalize">
+              <div className="mr-24 capitalize">
                 <div className="">
                   <h1 className="mb-8 text-2xl font-bold capitalize">
                     Group Details
@@ -226,7 +226,7 @@ const group = () => {
                   )}
                 </div>
               </div>
-              <div className="w-1/3">
+              <div className="">
                 <div>
                   <h1 className="mb-8 text-2xl font-bold capitalize">
                     {group.name}
@@ -235,7 +235,7 @@ const group = () => {
 
                 {/* files */}
                 <h1 className="mb-2 text-lg font-bold">Files:</h1>
-                <div className="flex flex-col h-56 p-5 m-auto mb-10 overflow-scroll bg-gray-900 border rounded-2xl">
+                <div className="flex flex-col h-56 p-5 m-auto mb-10 overflow-scroll [--scroll-mt:9.875rem] lg:[--scroll-mt:6.3125rem] bg-gray-900 border rounded-2xl">
                   <input
                     type="text"
                     value={searchQuery}
@@ -327,7 +327,7 @@ const group = () => {
                         viewBox="0 0 24 24"
                         strokeWidth={1.5}
                         stroke="currentColor"
-                        className="float-right w-6 h-6 mt-2 mr-2 -mb-10 text-gray-400 cursor-pointer hover:text-gray-500"
+                        className="w-6 h-6 mt-2 ml-2 mr-2 -mb-10 text-gray-400 cursor-pointer hover:text-gray-500"
                       >
                         <path
                           strokeLinecap="round"
@@ -378,7 +378,7 @@ const group = () => {
                 </div>
               </div>
               {/* Members */}
-              <div className="flex w-1/3">
+              <div className="flex">
                 <div className="flex flex-col w-full ml-7">
                   <h1 className="text-2xl">Members</h1>
                   {group.membersDisplay?.map((member: string, i: number) => (

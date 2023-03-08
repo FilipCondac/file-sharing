@@ -8,9 +8,9 @@ const RenderFile: React.FunctionComponent<{ file: IFile }> = ({
   file: { format, sizeInBytes, name },
 }) => {
   return (
-    <div className="flex flex-col items-center w-full p-5 pt-4 mt-0 mb-5 text-white border rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre hover:wiggle">
+    <div className="flex flex-col items-center p-20 mb-5 text-white border w-96 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre hover:wiggle">
       <div className="flex flex-col ">
-        <h1 className="m-auto mb-5 font-bold">File Details</h1>
+        <h1 className="m-auto mb-5 text-2xl font-bold">File Details</h1>
         <span className="m-6 mt-3 text-center ">Name: {name}</span>
         <div className="flex m-auto mt-0">
           <span className="">Format: {format.toUpperCase()} </span>

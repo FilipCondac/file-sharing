@@ -191,9 +191,9 @@ const TopNav = (props: any) => {
   };
 
   return (
-    <div className="fixed w-full h-16 p-0 text-gray-500">
+    <div className="fixed z-10 w-full h-16 p-0 text-gray-500">
       <div className="float-left">
-        <h2 className="w-64 h-48 m-4 text-4xl font-bold ">
+        <h2 className="w-64 h-48 m-4 text-5xl font-bold text-white">
           <span onClick={handleRedirect} className="cursor-pointer">
             SharePal
           </span>

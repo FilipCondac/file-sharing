@@ -29,63 +29,89 @@ const index: NextPage<{ file: IFile }> = ({
   return (
     <div className="flex flex-col items-center h-full overflow-auto text-xl text-black font-Raleway bg-slate-900">
       <TopNav />
-      {!id ? (
-        <span>File does not exist</span>
-      ) : (
-        <>
-          <div className="m-auto">
-            <h1 className="mb-6 font-bold text-gray-300 uppercase">
-              Your file is ready for download
-            </h1>
-            <FileRender file={{ format, name, sizeInBytes }} />
-            <div className="m-auto mt-10 text-center">
-              {qrCodeDataUrl && (
-                <div className="m-auto">
-                  <img
-                    src={qrCodeDataUrl}
-                    className="m-auto mb-4 border"
-                    alt="QR code"
-                  />{" "}
-                </div>
-              )}
-              <button
-                className="flex items-center px-4 py-2 m-auto mb-10 font-bold text-gray-800 bg-gray-300 rounded hover:bg-gray-400"
-                onClick={generateQRCode}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6 mr-2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3l-3 3"
-                  />
-                </svg>
-
-                <span>Generate QR </span>
-              </button>
-              <button
-                className="inline-flex items-center px-4 py-2 font-bold text-gray-800 bg-gray-300 rounded hover:bg-gray-400"
-                onClick={handleDownload}
-              >
-                <svg
-                  className="w-4 h-4 mr-2 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
-                </svg>
-                <span>Download</span>
-              </button>
+      <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full overflow-auto">
+        {!id ? (
+          <span>File does not exist</span>
+        ) : (
+          <>
+            <div className="fixed flex flex-col mr-96 -ml-96 w-80">
+              <h1 className="text-4xl font-semibold text-white">
+                Take your sharing to the next level with our intuitive file
+                sharing tools.
+              </h1>
+              <p className="mt-5 text-2xl font-semibold text-white">
+                Share files your own way
+              </p>
+              <p className="mt-2 text-2xl font-light text-white">
+                - Link Sharing
+              </p>
+              <p className="mt-2 text-2xl font-light text-white">
+                - Group Sharing
+              </p>
+              <p className="mt-2 text-2xl font-light text-white">
+                - QR Sharing
+              </p>
+              <p className="mt-2 text-2xl font-light text-white">
+                - Phrase Sharing
+              </p>
+              <p className="mt-2 text-2xl font-light text-white">
+                - Email Sharing
+              </p>
             </div>
-          </div>
-        </>
-      )}
+            <div className="m-auto">
+              <h1 className="mb-6 font-bold text-gray-300 uppercase">
+                Your file is ready for download
+              </h1>
+              <FileRender file={{ format, name, sizeInBytes }} />
+              <div className="m-auto mt-10 text-center">
+                {qrCodeDataUrl && (
+                  <div className="m-auto">
+                    <img
+                      src={qrCodeDataUrl}
+                      className="m-auto mb-4 border"
+                      alt="QR code"
+                    />{" "}
+                  </div>
+                )}
+                <button
+                  className="flex items-center px-4 py-2 m-auto mb-10 font-bold text-gray-800 bg-gray-300 rounded hover:bg-gray-400"
+                  onClick={generateQRCode}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-6 h-6 mr-2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3l-3 3"
+                    />
+                  </svg>
+
+                  <span>Generate QR </span>
+                </button>
+                <button
+                  className="inline-flex items-center px-4 py-2 font-bold text-gray-800 bg-gray-300 rounded hover:bg-gray-400"
+                  onClick={handleDownload}
+                >
+                  <svg
+                    className="w-4 h-4 mr-2 fill-current"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
+                  </svg>
+                  <span>Download</span>
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 };
