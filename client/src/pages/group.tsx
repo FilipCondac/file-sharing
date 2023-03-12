@@ -153,15 +153,15 @@ const group = () => {
   );
 
   return (
-    <div className="flex flex-col w-full h-full mb-24 bg-primarycolor-dark text-primarycolor-lightest font-Raleway">
+    <div className="flex flex-col w-full h-full text-white bg-primarycolor-dark font-Raleway">
       <TopNav
         isAuthorized={isAuthorized}
         setAccountOptions={setAccountOptions}
       />
       {!accountOptions ? (
-        <div className="flex flex-col items-center p-5 m-auto mt-44 ">
+        <div className="flex flex-col items-center p-5 m-auto ">
           {group ? (
-            <div className="flex p-4 mb-8 mr-10 font-bold border border-slate-600 text-slate-400 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre font-Raleway">
+            <div className="flex p-4 mb-8 mr-10 font-bold text-white border border-slate-600 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre font-Raleway">
               {/* Group details */}
               <div className="mr-24 capitalize">
                 <div className="">
@@ -258,7 +258,7 @@ const group = () => {
 
                 {/* files */}
                 <h1 className="mb-2 text-lg font-bold">Files:</h1>
-                <div className="flex flex-col h-56 p-5 m-auto mb-10 overflow-scroll [--scroll-mt:9.875rem] lg:[--scroll-mt:6.3125rem] bg-gray-900 border rounded-2xl">
+                <div className="flex flex-col h-56 p-5 m-auto mb-10 overflow-y-scroll [--scroll-mt:9.875rem] lg:[--scroll-mt:6.3125rem] bg-gray-900 border rounded-2xl">
                   <input
                     type="text"
                     value={searchQuery}
