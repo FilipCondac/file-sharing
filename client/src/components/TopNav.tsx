@@ -28,7 +28,7 @@ const TopNav = (props: any) => {
 
   useEffect(() => {
     getGroups();
-  }, [joinStatus, groupName]);
+  }, [joinStatus, groupName, groupWordPhrase]);
 
   //Get User Status
   React.useEffect(() => {
@@ -224,7 +224,7 @@ const TopNav = (props: any) => {
                         <div className="flex">
                           {/* Join group button */}
                           <div
-                            className="flex float-left p-1 text-base bg-gray-800 border rounded-lg cursor-pointer"
+                            className="flex float-left p-1 text-base bg-gray-800 border rounded cursor-pointer"
                             onClick={renderCreateGroup}
                           >
                             <span className="mx-2">Join Group</span>
@@ -245,7 +245,7 @@ const TopNav = (props: any) => {
                           </div>
                           {/* Create group button */}
                           <div
-                            className="flex float-right p-1 ml-2 text-base bg-gray-800 border rounded-lg cursor-pointer"
+                            className="flex float-right p-1 ml-2 text-base bg-gray-800 border rounded cursor-pointer"
                             onClick={renderJoinGroup}
                           >
                             <span className="mx-2">Create Group</span>
@@ -335,7 +335,7 @@ const TopNav = (props: any) => {
                       <h2 className="m-auto mt-3 ">Groups</h2>
                       {groupList.map((group, i) => (
                         <div
-                          className="flex p-3 mt-2 bg-gray-800 border rounded-lg cursor-pointer"
+                          className="flex p-3 mt-2 bg-gray-800 border rounded cursor-pointer"
                           key={i}
                           onClick={() => handleGroupRedirect(group)}
                         >

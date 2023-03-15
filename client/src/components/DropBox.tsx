@@ -36,13 +36,11 @@ const DropBox: React.FunctionComponent<{ setFile: React.Dispatch<any> }> = ({
 
   // Set the main class to the default class and change it if the file is accepted or rejected
   let mainClass =
-    "items-center h-full  text-primarycolor-lightest rounded-2xl border justify-centre hover:shadow-[0_20px_60px_20px_rgba(235,206,235,0.025)]";
+    "items-center h-full  text-primarycolor-lightest rounded  justify-centre";
   if (isDragReject) {
-    mainClass =
-      "items-center h-full shadow-[0_20px_60px_20px_rgba(255,100,0,0.1)] text-slate-400 rounded-2xl bg-gradient-to-r border-slate-600 from-slate-800 to-slate-900 justify-centre hover:wiggle";
+    mainClass = "items-center h-full  text-red-500 rounded  justify-centre";
   } else if (isDragAccept) {
-    mainClass =
-      "items-center h-full shadow-[0_20px_60px_20px_rgba(0,255,0,0.1)] text-slate-400 rounded-2xl bg-gradient-to-r border-slate-600 from-slate-800 to-slate-900 justify-centre hover:wiggle";
+    mainClass = "items-center h-full  text-green-400 rounded  justify-centre";
   }
 
   return (
@@ -71,7 +69,7 @@ const DropBox: React.FunctionComponent<{ setFile: React.Dispatch<any> }> = ({
         ) : (
           <div className="flex flex-col m-auto">
             <p className="w-3/5 m-auto text-center">
-              Drag & Drop a file or click this box to begin upload
+              Drag & Drop a file or click here to begin upload
             </p>
             <p className="w-3/5 m-auto text-center mt-28">
               Accepts PNG, JPEG, JPG, MP3 & PDF

@@ -81,7 +81,7 @@ const register = () => {
       </h1>
       <form
         onSubmit={onSubmit}
-        className="m-auto mt-5 border p-20 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre text-center hover:shadow-[0_20px_60px_20px_rgba(235,206,235,0.1)]"
+        className="m-auto mt-5 border p-20 rounded bg-gradient-to-r from-slate-800 to-slate-900 justify-centre text-center hover:shadow-[0_20px_60px_20px_rgba(235,206,235,0.1)]"
       >
         <div className="m-auto ">
           {accountError !== "" && (

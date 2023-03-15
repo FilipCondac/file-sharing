@@ -85,6 +85,7 @@ router.post("/upload", upload.single("myFile"), async (req, res) => {
       const file = await File.create({
         filename: originalname,
         sizeInBytes: bytes,
+        displayPhrase: wordPhrase,
         phrase: dbPhrase,
         creator: userID,
         secure_url,

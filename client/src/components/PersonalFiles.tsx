@@ -37,22 +37,22 @@ const PersonalFiles = () => {
   };
   return (
     <div>
-      <h2 className="flex flex-col items-center m-auto mb-5 text-lg font-bold">
+      <h2 className="flex flex-col items-center m-auto mb-5 text-lg font-bold ">
         My files
       </h2>
-      <div className="flex flex-col m-auto text-white mt-9 h-96 rounded-xl ">
-        <div className="">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search files..."
-            className="p-2 mt-4 mb-2 ml-40 text-sm bg-gray-800 border border-gray-700 rounded-md"
-          />
+      <div className="flex flex-col m-auto text-white mt-9 h-96 ">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search files..."
+          className="p-2 mt-4 mb-2 text-sm bg-gray-800 border border-gray-700 rounded-md"
+        />
+        <div className="p-1 overflow-scroll">
           {filteredFiles?.map((file, i) => (
             <div
               key={i}
-              className={`flex flex-col p-2 mx-3 mt-3 mb-5 font-light bg-gray-800 border-slate-600  border rounded-lg text-lg ${
+              className={`flex flex-col p-2 mx-3 mt-3 mb-5 font-light bg-gray-800 border-slate-600  border rounded-sm text-lg ${
                 expandedFile === i ? "border-sky-400" : ""
               }`}
             >
@@ -95,6 +95,12 @@ const PersonalFiles = () => {
                       <h1 className="mt-2 text-sm font-bold">
                         Format:{" "}
                         <span className="font-light">{file.format}</span>
+                      </h1>
+                    </div>
+                    <div className="flex flex-col">
+                      <h1 className="mt-2 text-sm font-bold">
+                        Download Phrase:{" "}
+                        <span className="font-light">{file.displayPhrase}</span>
                       </h1>
                     </div>
                     <div className="flex flex-col">

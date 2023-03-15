@@ -161,7 +161,7 @@ const group = () => {
       {!accountOptions ? (
         <div className="flex flex-col items-center p-5 m-auto ">
           {group ? (
-            <div className="flex p-4 mb-8 mr-10 font-bold text-white border border-slate-600 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 justify-centre font-Raleway">
+            <div className="flex p-4 mb-8 mr-10 font-bold text-white border rounded border-slate-600 bg-gradient-to-r from-slate-800 to-slate-900 justify-centre font-Raleway">
               {/* Group details */}
               <div className="mr-24 capitalize">
                 <div className="">
@@ -202,7 +202,7 @@ const group = () => {
                 <div>
                   {!groupCreator && (
                     <div
-                      className="flex justify-center p-1 mt-10 text-center bg-red-600 border rounded-md cursor-pointer"
+                      className="flex justify-center p-1 mt-10 text-center bg-red-600 border rounded cursor-pointer"
                       onClick={handleLeave}
                     >
                       <svg
@@ -225,7 +225,7 @@ const group = () => {
                   )}
                   {groupCreator && (
                     <div
-                      className="flex justify-center p-1 mt-10 text-center bg-red-600 border rounded-md cursor-pointer"
+                      className="flex justify-center p-1 mt-10 text-center bg-red-600 border rounded cursor-pointer"
                       onClick={handleDelete}
                     >
                       <svg
@@ -258,7 +258,7 @@ const group = () => {
 
                 {/* files */}
                 <h1 className="mb-2 text-lg font-bold">Files:</h1>
-                <div className="flex flex-col h-56 p-5 m-auto mb-10 overflow-y-scroll [--scroll-mt:9.875rem] lg:[--scroll-mt:6.3125rem] bg-gray-900 border rounded-2xl">
+                <div className="flex flex-col h-56 p-5 m-auto mb-10 overflow-y-scroll bg-gray-900 border border-slate-700 rounded-xl">
                   <input
                     type="text"
                     value={searchQuery}
@@ -269,7 +269,7 @@ const group = () => {
                   {filteredFiles?.map((file, i) => (
                     <div
                       key={i}
-                      className={`flex flex-col p-2 mx-3 mt-3 mb-5 font-light bg-gray-800 border-slate-600  border rounded-lg text-lg ${
+                      className={`flex flex-col p-2 mx-3 mt-3 mb-5 font-light bg-gray-800 border-slate-600  border rounded text-lg ${
                         expandedFile === i ? "border-sky-400" : ""
                       }`}
                     >
@@ -407,7 +407,7 @@ const group = () => {
                   {group.membersDisplay?.map((member: string, i: number) => (
                     <div
                       key={i}
-                      className="flex flex-col p-2 mt-3 mb-5 font-light bg-gray-800 border rounded-lg border-sky-400"
+                      className="flex flex-col p-2 mt-3 mb-5 font-light bg-gray-800 border rounded border-sky-400"
                     >
                       <span className="w-64 text-lg">{member}</span>
                     </div>

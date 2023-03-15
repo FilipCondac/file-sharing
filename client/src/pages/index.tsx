@@ -87,7 +87,7 @@ const App = () => {
       <div className="flex items-center justify-center w-full h-full m-auto">
         {!accountOptions ? (
           <div className="flex">
-            <div className="flex flex-col w-1/3 ml-10">
+            <div className="flex flex-col w-1/4 ml-10 h-80">
               <h1 className="text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-600">
                 Take your sharing to the next level with our intuitive file
                 sharing tools.
@@ -111,8 +111,8 @@ const App = () => {
                 - Email Sharing
               </p>
             </div>
-            <div className="flex w-2/3 p-5 ml-2 mr-5 border bg-gradient-to-r from-slate-800 to-slate-900 rounded-xl">
-              <div className="flex flex-col w-1/2 overflow-y-auto">
+            <div className="flex w-2/3 p-5 ml-2 mr-5 border rounded bg-gradient-to-r from-slate-800 to-slate-900">
+              <div className="flex flex-col w-1/2">
                 {!file && (
                   <div className="m-auto">
                     <h1 className="m-auto mb-5 text-lg font-bold text-center text-white">
@@ -123,7 +123,7 @@ const App = () => {
                 )}
 
                 <div className="flex flex-col m-auto ">
-                  <div className="m-auto rounded-md h-72 w-96">
+                  <div className="h-auto m-auto w-96">
                     {/* Pass setFile updated variable to the DropBox component */}
                     {!file && componentRender && <DropBox setFile={setFile} />}
                     {file && (
@@ -145,7 +145,7 @@ const App = () => {
                       </div>
                     )}
 
-                    <div className="m-auto rounded-md ">
+                    <div className="m-auto ">
                       {/* Display the file name */}
                       {file && (
                         <FileRender
@@ -182,73 +182,73 @@ const App = () => {
                         </div>
                       )}
                     </div>
-
-                    {downloadPageLink && (
-                      <div className="m-auto">
-                        <DownloadFile
-                          downloadPageLink={downloadPageLink}
-                          phrase={phrase}
-                        />
-                        {qrCodeDataUrl && (
-                          <div className="m-auto">
-                            <img
-                              src={qrCodeDataUrl}
-                              className="m-auto mb-4 border"
-                              alt="QR code"
-                            />{" "}
-                          </div>
-                        )}
-                        <button
-                          className="flex items-center px-4 py-2 m-auto mb-10 font-bold text-gray-800 bg-gray-300 rounded hover:bg-gray-400"
-                          onClick={generateQRCode}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-6 h-6 mr-2"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3l-3 3"
-                            />
-                          </svg>
-
-                          <span>Generate QR </span>
-                        </button>
-
-                        <div className="m-auto">
-                          <button
-                            className="flex items-center px-4 py-2 m-auto mb-10 font-bold text-gray-800 bg-gray-300 rounded hover:bg-gray-400"
-                            onClick={resetComponent}
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={1.5}
-                              stroke="currentColor"
-                              className="w-4 h-4 mr-2 m"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-                              />
-                            </svg>
-                            <span>Upload new file </span>
-                          </button>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>
-              <div className="w-1/2 mr-5 overflow-scroll">
-                <PersonalFiles />
+              <div className="w-1/2 mr-5 ">
+                <div className="">{!downloadPageLink && <PersonalFiles />}</div>
+
+                {downloadPageLink && (
+                  <div className="m-auto mt-10 overflow-scroll">
+                    <DownloadFile
+                      downloadPageLink={downloadPageLink}
+                      phrase={phrase}
+                    />
+                    {qrCodeDataUrl && (
+                      <div className="m-auto">
+                        <img
+                          src={qrCodeDataUrl}
+                          className="m-auto mb-4 border"
+                          alt="QR code"
+                        />{" "}
+                      </div>
+                    )}
+                    <button
+                      className="flex items-center px-4 py-2 m-auto mb-10 font-bold text-gray-800 bg-gray-300 rounded hover:bg-gray-400"
+                      onClick={generateQRCode}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6 mr-2"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3l-3 3"
+                        />
+                      </svg>
+
+                      <span>Generate QR </span>
+                    </button>
+
+                    <div className="m-auto">
+                      <button
+                        className="flex items-center px-4 py-2 m-auto mb-10 font-bold text-gray-800 bg-gray-300 rounded hover:bg-gray-400"
+                        onClick={resetComponent}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="w-4 h-4 mr-2 m"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+                          />
+                        </svg>
+                        <span>Upload new file </span>
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
