@@ -18,6 +18,12 @@ module.exports = {
       boxShadow: {
         "3xl": "0 35px 60px -15px rgba(5, 5, 5, 0.3)",
       },
+      screens: {
+        sm: { min: "576px", max: "767px" },
+        md: { min: "768px", max: "991px" },
+        lg: { min: "992px", max: "1199px" },
+        xl: { min: "1200px" },
+      },
     },
   },
   variants: {

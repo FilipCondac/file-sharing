@@ -79,14 +79,14 @@ const App = () => {
   };
 
   return (
-    <main className="flex flex-col h-full overflow-y-auto bg-primarycolor-dark font-Raleway">
+    <main className="flex flex-col h-full overflow-y-auto sm:overflow-auto bg-primarycolor-dark font-Raleway">
       <TopNav
         isAuthorized={isAuthorized}
         setAccountOptions={setAccountOptions}
       />
       <div className="flex items-center justify-center w-full h-full m-auto">
         {!accountOptions ? (
-          <div className="flex">
+          <div className="flex ">
             <div className="flex flex-col w-1/4 ml-10 h-80">
               <h1 className="text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-600">
                 Take your sharing to the next level with our intuitive file

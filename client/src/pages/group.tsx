@@ -8,6 +8,7 @@ import AccountOptions from "@/components/AccountOptions";
 import DropBox from "@/components/DropBox";
 import FileRender from "@/components/FileRender";
 import fileDownload from "js-file-download";
+import { calcBytes } from "libs/calcBytes";
 
 const group = () => {
   const router = useRouter();
@@ -304,7 +305,7 @@ const group = () => {
                               <h1 className="mt-2 text-sm font-bold">
                                 Size:{" "}
                                 <span className="font-light">
-                                  {file.sizeInBytes}
+                                  {calcBytes(file.sizeInBytes)}
                                   <span className="ml-1 font-bold">mb</span>
                                 </span>
                               </h1>
