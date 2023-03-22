@@ -10,7 +10,6 @@ const DropBox: React.FunctionComponent<{ setFile: React.Dispatch<any> }> = ({
   const onDrop = useCallback((acceptedFiles: any) => {
     // Call the setFile function to update the file state variable
     // Calls at index 0 because we are only allowing one file to be uploaded
-    console.log(acceptedFiles);
     setFile(acceptedFiles[0]);
   }, []);
 

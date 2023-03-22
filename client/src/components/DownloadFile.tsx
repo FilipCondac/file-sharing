@@ -1,6 +1,14 @@
 import React, { ReactElement } from "react";
 
-const DownloadFile: React.FC = ({ downloadPageLink, phrase }): ReactElement => {
+interface DownloadFileProps {
+  downloadPageLink: string;
+  phrase: string;
+}
+
+const DownloadFile: React.FC<DownloadFileProps> = ({
+  downloadPageLink,
+  phrase,
+}): ReactElement => {
   const handleLinkClick = () => {
     window.location.href = downloadPageLink;
   };

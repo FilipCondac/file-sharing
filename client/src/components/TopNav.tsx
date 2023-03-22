@@ -5,11 +5,21 @@ import logout from "libs/logout";
 import { useRouter } from "next/router";
 import axios from "axios";
 
+interface Group {
+  groupname: string;
+  members: string[];
+}
+
+interface User {
+  displayName: string;
+  email: string;
+}
+
 const TopNav = (props: any) => {
   const router = useRouter();
 
   //Dropdown menu
-  const [user, setUser] = React.useState(null);
+  const [user, setUser] = React.useState<User | null>(null);
   const [dropdown, setDropdown] = React.useState(false);
 
   //Groups create
@@ -18,7 +28,7 @@ const TopNav = (props: any) => {
   const [groupName, setGroupName] = React.useState("");
 
   //Group list
-  const [groupList, setGroupList] = React.useState([]);
+  const [groupList, setGroupList] = React.useState<Group[]>([]);
 
   //Join Group
   const [joinGroup, setJoinGroup] = React.useState(false);
@@ -146,7 +156,6 @@ const TopNav = (props: any) => {
       if (status === 200) {
         setJoinStatus("Joined Group Successfully");
       } else if (status === 404) {
-        console.log(data.message);
         setJoinStatus("Group Not Found");
       } else {
         console.log(data.message);
@@ -333,7 +342,7 @@ const TopNav = (props: any) => {
                       </div>
                       {/* List groups user is part of */}
                       <h2 className="m-auto mt-3 ">Groups</h2>
-                      {groupList.map((group, i) => (
+                      {groupList.map((group: Group, i: number) => (
                         <div
                           className="flex p-3 mt-2 bg-gray-800 border rounded cursor-pointer"
                           key={i}

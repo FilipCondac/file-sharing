@@ -37,7 +37,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { phrase } = context.query;
   let file;
   try {
-    const { data } = await axios.get(`api/files/phrase/${phrase}`);
+    const { data } = await axios.get(
+      `${process.env.API_BASE_ENDPOINT}api/files/phrase/${phrase}`
+    );
     file = data;
   } catch (error: any) {
     console.log(error.response.data);

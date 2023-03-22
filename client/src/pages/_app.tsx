@@ -2,7 +2,7 @@ import axios from "axios";
 import "../../styles/globals.css";
 import React from "react";
 
-axios.defaults.baseURL = "http://localhost:8000/";
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_BASE_ENDPOINT;
 
 function MyApp({ Component, pageProps }: any) {
   return (

@@ -4,8 +4,16 @@ import React, { useEffect, useState } from "react";
 import { calcBytes } from "libs/calcBytes";
 
 const PersonalFiles = () => {
+  interface UserFile {
+    _id: string;
+    filename: string;
+    sizeInBytes: number;
+    format: string;
+    displayPhrase: string;
+  }
+
+  const [userFiles, setUserFiles] = useState<UserFile[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [userFiles, setUserFiles] = useState([]);
   const [expandedFile, setExpandedFile] = useState(null as number | null);
 
   const handleDownload = async (id: string, name: string) => {
@@ -33,7 +41,6 @@ const PersonalFiles = () => {
 
   const getUserFiles = async () => {
     const { data } = await axios.get("api/files/getUserFiles");
-    console.log(data);
     setUserFiles(data.files);
   };
   return (
@@ -87,7 +94,7 @@ const PersonalFiles = () => {
                       <h1 className="mt-2 text-sm font-bold">
                         Size:{" "}
                         <span className="font-light">
-                          {calcBytes(file.sizeInBytes)}
+                          {calcBytes(file.sizeInBytes.toString())}
                           <span className="ml-1 font-bold">mb</span>
                         </span>
                       </h1>

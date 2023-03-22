@@ -22,7 +22,6 @@ const register = () => {
 
       if (status === 200) {
         window.location.href = "/";
-        console.log(user);
       } else if (status === 404) {
         setAccountError("Invalid credentials");
       } else {
@@ -32,20 +31,6 @@ const register = () => {
       console.log(error);
     }
   };
-
-  // const signInWithGoogle = async () => {
-  //   const response = await fetch(
-  //     "http://localhost:8000/api/files/signInWithGoogle",
-  //     {
-  //       method: "GET",
-  //       headers: { "Content-Type": "application/json" },
-  //     }
-  //   );
-  //   console.log(response);
-  //   // const data = await response.json();
-  //   // const user = data.user;
-  //   // const statusCode = data.status;
-  // };
 
   const loadEmailForm = () => {
     setEmailForm(true);
@@ -61,7 +46,6 @@ const register = () => {
 
       if (status === 200) {
         window.location.href = "/";
-        console.log(data.message);
       } else if (status === 404) {
         setAccountError("Invalid credentials");
       } else {

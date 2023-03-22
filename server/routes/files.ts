@@ -36,7 +36,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const fireApp = initializeApp(firebaseConfig);
-const admin = require("firebase-admin");
 
 // const provider = new GoogleAuthProvider();
 // provider.addScope("https://www.googleapis.com/auth/contacts.readonly");
@@ -533,32 +532,6 @@ router.get("/group/:groupID", async (req, res) => {
     return res
       .status(500)
       .json({ message: "Server Error finding group by ID" });
-  }
-});
-
-router.post("/getUsername", async (req, res) => {
-  // Retrieve user IDs from query string
-  const { members } = req.body;
-
-  console.log(members);
-  if (Array.isArray(members)) {
-    const displayNames = members.map((uid) =>
-      admin
-        .auth()
-        .getUser(uid)
-        .then((user: any) => user.displayName)
-    );
-    Promise.all(displayNames)
-      .then((displayNames) => {
-        console.log(displayNames);
-        res.status(200).json(displayNames);
-      })
-      .catch((error) => {
-        console.log("Error getting users:", error);
-        res.status(500).json({ error: "Unable to retrieve display names." });
-      });
-  } else {
-    res.status(400).json({ error: "Invalid request parameters." });
   }
 });
 

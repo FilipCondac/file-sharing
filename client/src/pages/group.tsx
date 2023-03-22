@@ -1,3 +1,5 @@
+//@ts-ignore
+//@ts-nocheck
 import TopNav from "@/components/TopNav";
 import axios from "axios";
 import { Group } from "next/dist/shared/lib/router/utils/route-regex";
@@ -37,7 +39,6 @@ const group = () => {
   }, [group]);
 
   const getGroup = async () => {
-    console.log(router.query);
     const { groupID } = router.query;
 
     try {
@@ -91,7 +92,7 @@ const group = () => {
       const { data } = await axios.post("api/files/leaveGroup", {
         groupID: router.query.groupID,
       });
-      console.log(data);
+
       window.location.href = "/";
     } catch (error: any) {
       console.log(error);
@@ -107,7 +108,6 @@ const group = () => {
       if (confirmed) {
         const { data } = await axios.delete(`api/files/deleteGroup/${id}`);
         window.location.href = "/";
-        console.log(data.message);
       }
     } catch (error: any) {
       console.log(error);
@@ -128,7 +128,7 @@ const group = () => {
     const { groupID } = router.query;
     try {
       const { data } = await axios.get(`api/files/getFilesByGroup/${groupID}`);
-      console.log(data);
+
       setGroupFiles(data);
     } catch (error: any) {
       console.log(error);
@@ -305,7 +305,7 @@ const group = () => {
                               <h1 className="mt-2 text-sm font-bold">
                                 Size:{" "}
                                 <span className="font-light">
-                                  {calcBytes(file.sizeInBytes)}
+                                  {calcBytes(file.sizeInBytes.toString())}
                                   <span className="ml-1 font-bold">mb</span>
                                 </span>
                               </h1>

@@ -29,7 +29,6 @@ const register = () => {
 
       if (status === 200) {
         window.location.href = "/";
-        console.log(user);
       } else {
         console.log(data.message);
       }

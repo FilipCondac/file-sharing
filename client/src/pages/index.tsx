@@ -2,10 +2,9 @@ import DropBox from "@/components/DropBox";
 import TopNav from "@/components/TopNav";
 import FileRender from "@/components/FileRender";
 import PhraseSearch from "@/components/PhraseSearch";
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import DownloadFile from "@/components/DownloadFile";
-import React from "react";
 import authorizedStatus from "../../libs/authorizedStatus";
 import AccountOptions from "@/components/AccountOptions";
 import QRCode from "qrcode";
@@ -118,6 +117,7 @@ const App = () => {
                     <h1 className="m-auto mb-5 text-lg font-bold text-center text-white">
                       Search files by phrase
                     </h1>
+
                     <PhraseSearch setComponentRender={setComponentRender} />
                   </div>
                 )}
