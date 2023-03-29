@@ -5,17 +5,21 @@ import logout from "libs/logout";
 import { useRouter } from "next/router";
 import axios from "axios";
 
+//Group interface
 interface Group {
   groupname: string;
   members: string[];
 }
 
+//User interface
 interface User {
   displayName: string;
   email: string;
 }
 
+//TopNav component
 const TopNav = (props: any) => {
+  //Router hook for navigation
   const router = useRouter();
 
   //Dropdown menu
@@ -36,6 +40,7 @@ const TopNav = (props: any) => {
   const [groupWordPhrase, setGroupWordPhrase] = React.useState("");
   const [joinStatus, setJoinStatus] = React.useState("");
 
+  //Get groups on change of join status, group name, or group word phrase
   useEffect(() => {
     getGroups();
   }, [joinStatus, groupName, groupWordPhrase]);
@@ -186,6 +191,7 @@ const TopNav = (props: any) => {
     }
   };
 
+  //Handle redirect to home page
   const handleRedirect = () => {
     if (window.location.href === "/") {
       window.location.reload();
@@ -194,6 +200,7 @@ const TopNav = (props: any) => {
     }
   };
 
+  //Handle redirect to group page by group id
   const handleGroupRedirect = (group: any) => {
     router.push({
       pathname: "/group",

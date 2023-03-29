@@ -5,6 +5,7 @@ import fileDownload from "js-file-download";
 
 interface Props {}
 
+//Interface for file
 interface File {
   id: string;
   name: string;
@@ -14,6 +15,7 @@ interface File {
 }
 
 const PhraseSearch = (props: any) => {
+  //States
   const [searchTerm, setSearchTerm] = useState("");
   let [file, setFile] = useState<File | null>(null);
   const [fileNotFound, setFileNotFound] = useState(false);

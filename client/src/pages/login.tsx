@@ -3,14 +3,17 @@ import TopNav from "@/components/TopNav";
 import axios from "axios";
 
 const register = () => {
+  //States
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [accountError, setAccountError] = useState("");
   const [emailForm, setEmailForm] = useState(false);
 
+  //On submit login user
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
+    //If form complete and valid, login user
     try {
       const { data, status } = await axios.post(
         "api/files/login",
@@ -19,10 +22,11 @@ const register = () => {
       );
 
       const user = data.user;
-
       if (status === 200) {
+        //If status is 200, redirect to home page
         window.location.href = "/";
       } else if (status === 404) {
+        //If status is 404, set account error
         setAccountError("Invalid credentials");
       } else {
         console.log(data.message);
@@ -32,10 +36,12 @@ const register = () => {
     }
   };
 
+  //Load email form
   const loadEmailForm = () => {
     setEmailForm(true);
   };
 
+  //Reset password{WIP!!!!!!!!!!}
   const resetPassword = async () => {
     try {
       const { data, status } = await axios.post(

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { calcBytes } from "libs/calcBytes";
 
 const PersonalFiles = () => {
+  //User Files interface
   interface UserFile {
     _id: string;
     filename: string;
@@ -12,10 +13,12 @@ const PersonalFiles = () => {
     displayPhrase: string;
   }
 
+  //States
   const [userFiles, setUserFiles] = useState<UserFile[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedFile, setExpandedFile] = useState(null as number | null);
 
+  //Functions to handle file download by id
   const handleDownload = async (id: string, name: string) => {
     const { data } = await axios.get(`api/files/id/${id}/download`, {
       responseType: "blob",
@@ -23,10 +26,12 @@ const PersonalFiles = () => {
     fileDownload(data, name);
   };
 
+  //Function to search files
   const filteredFiles = userFiles?.filter((file) =>
     file.filename.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  //Function to render file dropdown
   const renderFileDropdown = (fileIndex: number) => {
     if (expandedFile === fileIndex) {
       setExpandedFile(null);
@@ -35,14 +40,17 @@ const PersonalFiles = () => {
     }
   };
 
+  //Fetch user files on mount
   useEffect(() => {
     getUserFiles();
   }, []);
 
+  //Function to fetch user files
   const getUserFiles = async () => {
     const { data } = await axios.get("api/files/getUserFiles");
     setUserFiles(data.files);
   };
+
   return (
     <div>
       <h2 className="flex flex-col items-center m-auto mb-5 text-lg font-bold ">
@@ -57,6 +65,7 @@ const PersonalFiles = () => {
           className="p-2 mt-4 mb-2 text-sm bg-gray-800 border border-gray-700 rounded-md"
         />
         <div className="p-1 overflow-scroll">
+          {/* File loop display */}
           {filteredFiles?.map((file, i) => (
             <div
               key={i}
@@ -83,6 +92,7 @@ const PersonalFiles = () => {
                     />
                   </svg>
                 </div>
+                {/* Expands file */}
                 {expandedFile === i && (
                   <div className="flex flex-col">
                     <div className="flex flex-col">

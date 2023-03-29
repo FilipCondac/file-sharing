@@ -2,14 +2,18 @@ import React from "react";
 import authorizedStatus from "libs/authorizedStatus";
 import axios from "axios";
 
+//AccountOptions component
 const AccountOptions = () => {
+  //User interface
   interface User {
     displayName: string;
     email: string;
   }
 
+  //User state
   const [user, setUser] = React.useState<User | null>(null);
 
+  //Fetch authorized status on mount
   React.useEffect(() => {
     const fetchAuthorizedStatus = async () => {
       try {
@@ -22,22 +26,27 @@ const AccountOptions = () => {
     fetchAuthorizedStatus();
   }, []);
 
+  //Account options
   const [displayName, setDisplayName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [accountError, setAccountError] = React.useState("");
 
+  //Function to update account
   const updateAccount = async () => {
     try {
+      //If no display name is provided, use current display name
       const { status } = await axios.post(
         "api/files/updateAccount",
         { displayName, email, password },
         { headers: { "Content-Type": "application/json" } }
       );
 
+      //If status is 200, redirect to home page
       if (status === 200) {
         window.location.href = "/";
       } else {
+        //If status is not 200, set account error
         setAccountError("Invalid credentials");
       }
     } catch (error) {
@@ -45,18 +54,21 @@ const AccountOptions = () => {
     }
   };
 
+  //Function to delete account
   const deleteAccount = async () => {
     try {
+      //Confirm deletion
       const confirmed = window.confirm(
         "ARE YOU SURE YOU WANT TO DELETE ACCOUNT? THIS CANNOT BE UNDONE."
       );
+      //If confirmed, delete account
       if (confirmed) {
         const { status } = await axios.post(
           "api/files/deleteAccount",
           { password },
           { headers: { "Content-Type": "application/json" } }
         );
-
+        //If status is 200, redirect to home page
         if (status === 200) {
           window.location.href = "/";
         }
@@ -73,6 +85,7 @@ const AccountOptions = () => {
         <form className="">
           <div className="flex flex-col mb-5">
             <label className="mr-10 text-lg">Display Name:</label>
+            {/* Inputs */}
             <input
               type="text"
               className="p-1 px-2 rounded-lg bg-slate-700"

@@ -1,5 +1,6 @@
 import React, { ReactElement } from "react";
 
+//Download info interface
 interface DownloadFileProps {
   downloadPageLink: string;
   phrase: string;
@@ -9,6 +10,7 @@ const DownloadFile: React.FC<DownloadFileProps> = ({
   downloadPageLink,
   phrase,
 }): ReactElement => {
+  //Handle link click
   const handleLinkClick = () => {
     window.location.href = downloadPageLink;
   };

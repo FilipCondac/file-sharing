@@ -1,5 +1,5 @@
 import axios from "axios";
-
+//Function to logout user
 const logout = async () => {
   try {
     const response = await axios.get(`api/files/logout`);

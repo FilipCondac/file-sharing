@@ -22,6 +22,7 @@ const App = () => {
   const [uploadingStatus, setUploadingStatus] = useState<
     "Uploading" | "Upload Failed" | "Uploaded" | "Upload"
   >("Upload");
+
   const [qrCodeDataUrl, setQRCodeDataUrl] = useState("");
 
   const isAuthorized = authorizedStatus();
@@ -70,8 +71,11 @@ const App = () => {
     setUploadingStatus("Upload");
   };
 
+  //Generate QR code
   const generateQRCode = async () => {
+    //If downloadPageLink is not null, generate QR code
     if (downloadPageLink) {
+      //Generate QR code and set it to the state variable
       const qrCode = await QRCode.toDataURL(downloadPageLink);
       setQRCodeDataUrl(qrCode);
     }

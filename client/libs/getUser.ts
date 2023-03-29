@@ -1,3 +1,4 @@
+//Function to get the user from the server
 const getUser = async () => {
   const response = await fetch(
     "http://localhost:8000/api/files/authorizedStatus",

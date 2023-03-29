@@ -12,10 +12,15 @@ import FileRender from "@/components/FileRender";
 import fileDownload from "js-file-download";
 import { calcBytes } from "libs/calcBytes";
 
+//Group component
 const group = () => {
+  //Router for group id
   const router = useRouter();
+
+  //Group interface
   const isAuthorized = authorizedStatus();
 
+  //States
   const [group, setGroup] = React.useState<Group | null>(null);
   const [accountOptions, setAccountOptions] = React.useState(false);
   const [groupFiles, setGroupFiles] = React.useState<File[] | null>(null);
@@ -28,19 +33,21 @@ const group = () => {
   >("Upload");
   const [groupCreator, setGroupCreator] = useState(false);
 
+  //Get information about group and files on change of group id or upload status
   useEffect(() => {
     getFiles();
     getGroup();
-    // getUsername(group?.members);
   }, [router.query.groupID, uploadingStatus]);
 
+  //Check group owner for render purposes
   useEffect(() => {
     groupOwner();
   }, [group]);
 
+  //Get group information
   const getGroup = async () => {
+    //Get group id from router
     const { groupID } = router.query;
-
     try {
       const { data } = await axios.get(`api/files/group/${groupID}`);
       setGroup(data);
@@ -50,6 +57,7 @@ const group = () => {
     }
   };
 
+  //Handle download of file
   const handleDownload = async (id: string, name: string) => {
     const { data } = await axios.get(`api/files/id/${id}/download`, {
       responseType: "blob",
@@ -57,19 +65,24 @@ const group = () => {
     fileDownload(data, name);
   };
 
+  //Handle file upload
   const handleUpload = async () => {
     if (uploadingStatus === "Uploading") return;
     setUploadingStatus("Uploading");
+    //Create form data
     const formData = new FormData();
+    //Append file to form data
     if (file) {
       formData.append("myFile", file);
     }
 
+    //Append group id to form data
     const { groupID } = router.query;
     if (groupID) {
       formData.append("groupID", groupID);
     }
 
+    //Post form data to server
     try {
       const { data } = await axios({
         method: "POST",
@@ -87,6 +100,7 @@ const group = () => {
     }
   };
 
+  //Handle group leave
   const handleLeave = async () => {
     try {
       const { data } = await axios.post("api/files/leaveGroup", {
@@ -99,12 +113,16 @@ const group = () => {
     }
   };
 
+  //Handle group delete
   const handleDelete = async () => {
     try {
+      //Confirm delete
       const confirmed = window.confirm(
         "ARE YOU SURE YOU WANT TO DELETE GROUP? THIS CANNOT BE UNDONE."
       );
+      //Get group id from router
       const id = router.query.groupID;
+      //Delete group if confirmed
       if (confirmed) {
         const { data } = await axios.delete(`api/files/deleteGroup/${id}`);
         window.location.href = "/";
@@ -114,7 +132,9 @@ const group = () => {
     }
   };
 
+  //Check if user is group owner
   const groupOwner = async () => {
+    //Get user data
     const dataUser = await isAuthorized;
     const groupCreator = await group?.creator;
     if (dataUser?.uid === groupCreator) {
@@ -124,11 +144,13 @@ const group = () => {
     }
   };
 
+  //Get files for group
   const getFiles = async () => {
+    //Get group id from router
     const { groupID } = router.query;
     try {
+      //Get files for group from server
       const { data } = await axios.get(`api/files/getFilesByGroup/${groupID}`);
-
       setGroupFiles(data);
     } catch (error: any) {
       console.log(error);
@@ -136,11 +158,13 @@ const group = () => {
     }
   };
 
+  //Reset upload status and file
   const resetComponent = () => {
     setFile(null);
     setUploadingStatus("Upload");
   };
 
+  //Render file dropdown
   const renderFileDropdown = (fileIndex: number) => {
     if (expandedFile === fileIndex) {
       setExpandedFile(null);
@@ -149,6 +173,7 @@ const group = () => {
     }
   };
 
+  //Filter files by search query
   const filteredFiles = groupFiles?.files.filter((file) =>
     file.filename.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -201,6 +226,7 @@ const group = () => {
                   </h1>
                 </div>
                 <div>
+                  {/* If not group creator render leave button */}
                   {!groupCreator && (
                     <div
                       className="flex justify-center p-1 mt-10 text-center bg-red-600 border rounded cursor-pointer"
@@ -224,6 +250,7 @@ const group = () => {
                       <span className="my-auto font-semibold">Leave Group</span>
                     </div>
                   )}
+                  {/* If group creator render only delete button */}
                   {groupCreator && (
                     <div
                       className="flex justify-center p-1 mt-10 text-center bg-red-600 border rounded cursor-pointer"
@@ -267,6 +294,7 @@ const group = () => {
                     placeholder="Search files..."
                     className="p-2 mb-2 text-sm bg-gray-800 border border-gray-700 rounded-md"
                   />
+                  {/* File search */}
                   {filteredFiles?.map((file, i) => (
                     <div
                       key={i}
