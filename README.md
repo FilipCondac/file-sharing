@@ -13,9 +13,6 @@ The project was built using MERN alongside with Typescript. The authorization wa
 - [Demo](#demo)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Running Tests](#running-tests)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Demo
 Front page
